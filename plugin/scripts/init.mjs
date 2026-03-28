@@ -5,14 +5,13 @@
  *
  * 사용법: node init.mjs [serverUrl]
  *
- * 7단계 수행:
+ * 6단계 수행:
  * 1. ~/.ccusage-ralphgrip.json에 설정 저장
  * 2. ~/.claude/settings.json의 enabledPlugins에 플러그인 등록
  * 3. ~/.config/opencode/plugins/ccusage-ralphgrip.mjs 설치
  * 4. ~/.gemini/settings.json의 SessionEnd hook 연결
  * 5. ~/.codex/config.toml의 user-level notify hook 연결
- * 6. 과거 전체 미전송 세션 backfill
- * 7. Google OAuth 인증 (선택)
+ * 6. Google OAuth 인증 (선택)
  */
 
 import { copyFileSync, readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';

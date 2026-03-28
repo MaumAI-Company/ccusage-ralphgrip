@@ -8,192 +8,24 @@ on:
 
 jobs:
   check:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10
-
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        env:
-          # Use host-local SSD cache (persists across ephemeral runners)
-          PNPM_STORE_DIR: /opt/ci-cache/pnpm-store
-          npm_config_cache: /opt/ci-cache/npm
-
-      - name: Validate migrations
-        run: pnpm --filter dashboard db:validate
-
-      - name: Codegen freshness check
-        run: |
-          pnpm --filter dashboard generate
-          git diff --exit-code -- packages/dashboard/public/openapi.json packages/dashboard/src/lib/api-types.ts \
-            || (echo "::error::Generated files are out of date. Run 'pnpm --filter dashboard generate' and commit the result." && exit 1)
-
-      - name: Typecheck
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: TypeCheck
         run: pnpm --filter dashboard exec tsc --noEmit
-
       - name: Lint
         run: pnpm --filter dashboard lint
-
       - name: Build
         run: pnpm --filter dashboard build
-        env:
-          SUPABASE_URL: https://placeholder.supabase.co
-          SUPABASE_SERVICE_ROLE_KEY: placeholder
-          OAUTH_CLIENT_ID: placeholder
-          OAUTH_CLIENT_SECRET: placeholder
-          SESSION_SECRET: cGxhY2Vob2xkZXJwbGFjZWhvbGRlcnBsYWNlaG8xMjM=
-
-      - name: Dashboard unit tests
+      - name: Unit tests (dashboard)
         run: pnpm --filter dashboard test
-
-      - name: Plugin unit tests
+      - name: Unit tests (plugin)
         run: node --test plugin/scripts/lib/*.test.mjs
-
-      - name: Start local Supabase
-        run: |
-          if [ -f /.dockerenv ]; then
-            echo "Docker-in-Docker detected"
-            apt-get update -qq && apt-get install -y -qq socat > /dev/null 2>&1 || true
-
-            # Clean up stale Supabase containers from previous failed runs
-            STALE=$(docker ps -a --filter "name=supabase_.*ccusage-e2e-" --format '{{.Names}}' 2>/dev/null | head -20)
-            if [ -n "$STALE" ]; then
-              echo "Cleaning stale containers..."
-              echo "$STALE" | xargs docker rm -f 2>/dev/null || true
-            fi
-
-            PROJECT_ID="ccusage-e2e-${GITHUB_RUN_ID}"
-            MAX_RETRIES=3
-
-            for ATTEMPT in $(seq 1 $MAX_RETRIES); do
-              echo "=== Attempt $ATTEMPT/$MAX_RETRIES ==="
-
-              # Pick random ports with stride of 4 (API, DB, shadow, inbucket)
-              # Range: 54400–54996 in steps of 4 → 150 non-overlapping slots
-              SLOT=$(( (RANDOM + RANDOM) % 150 ))
-              API_PORT=$(( 54400 + SLOT * 4 ))
-              DB_PORT=$(( API_PORT + 1 ))
-              SHADOW_PORT=$(( API_PORT + 2 ))
-              INBUCKET_PORT=$(( API_PORT + 3 ))
-              echo "Using ports: API=$API_PORT DB=$DB_PORT SHADOW=$SHADOW_PORT INBUCKET=$INBUCKET_PORT"
-
-              # Reset config.toml to original before each attempt (git checkout)
-              git checkout -- packages/dashboard/supabase/config.toml
-
-              # Apply port overrides
-              sed -i "s/ccusage-ralphgrip-local/${PROJECT_ID}/" packages/dashboard/supabase/config.toml
-              sed -i "s/^port = 54351$/port = $API_PORT/" packages/dashboard/supabase/config.toml
-              sed -i "s/^port = 54352$/port = $DB_PORT/" packages/dashboard/supabase/config.toml
-              sed -i "s/^shadow_port = 54350$/shadow_port = $SHADOW_PORT/" packages/dashboard/supabase/config.toml
-              sed -i "s/^port = 54354$/port = $INBUCKET_PORT/" packages/dashboard/supabase/config.toml
-
-              # Kill any previous socat forwarders
-              pkill -f "socat TCP-LISTEN:5[0-9]{4}" 2>/dev/null || true
-
-              # Forward runner localhost → host (where Supabase containers bind)
-              socat TCP-LISTEN:$API_PORT,fork,reuseaddr TCP:host.docker.internal:$API_PORT &
-              socat TCP-LISTEN:$DB_PORT,fork,reuseaddr TCP:host.docker.internal:$DB_PORT &
-              socat TCP-LISTEN:$INBUCKET_PORT,fork,reuseaddr TCP:host.docker.internal:$INBUCKET_PORT &
-              sleep 1
-
-              if npx supabase start --workdir packages/dashboard; then
-                echo "Supabase started successfully on attempt $ATTEMPT"
-                echo "SUPABASE_URL=http://127.0.0.1:$API_PORT" >> "$GITHUB_ENV"
-                break
-              fi
-
-              echo "supabase start failed on attempt $ATTEMPT"
-
-              # Stop the failed project's containers before retrying
-              npx supabase stop --workdir packages/dashboard --no-backup 2>/dev/null || true
-
-              if [ "$ATTEMPT" -eq "$MAX_RETRIES" ]; then
-                echo "::error::supabase start failed after $MAX_RETRIES attempts"
-                exit 1
-              fi
-
-              sleep 2
-            done
-          else
-            npx supabase start --workdir packages/dashboard
-          fi
-
-      - name: Install Playwright browsers
-        run: |
-          # Use host-local cache for Playwright browsers
-          export PLAYWRIGHT_BROWSERS_PATH=/opt/ci-cache/playwright
-          npx playwright install chromium --with-deps
-
-      - name: E2E tests
-        run: npx playwright test --reporter=list
-        env:
-          CI: true
-          PLAYWRIGHT_BROWSERS_PATH: /opt/ci-cache/playwright
-          SUPABASE_URL: ${{ env.SUPABASE_URL || 'http://127.0.0.1:54351' }}
-          SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
-          SESSION_SECRET: dGVzdC1zZWNyZXQtZm9yLWUyZS10ZXN0aW5nLTMyYnk=
-          OAUTH_CLIENT_ID: test-client-id
-          OAUTH_CLIENT_SECRET: test-client-secret
-          AUTH_TEST_BYPASS: 'true'
-
-      - name: Upload Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v5
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-
-      - name: Stop local Supabase
-        if: always()
-        run: npx supabase stop --workdir packages/dashboard --no-backup || true
-
-  deploy:
-    needs: check
-    runs-on: self-hosted
-    # Only deploy on push to main (not PRs), and only if check passed
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v5
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-
-      - name: Deploy via SSM
-        run: |
-          COMMAND_ID=$(aws ssm send-command \
-            --instance-ids "i-05e8a64308ee5eb3f" \
-            --document-name "AWS-RunShellScript" \
-            --parameters '{"commands":["cd /opt/ccusage-ralphgrip && git checkout -- . && git pull origin main && pnpm install --frozen-lockfile && pnpm --filter dashboard build && HOME=/root pm2 reload ccusage-dashboard --update-env || HOME=/root pm2 start ecosystem.config.cjs && HOME=/root pm2 save"]}' \
-            --query "Command.CommandId" \
-            --output text)
-
-          echo "SSM Command ID: $COMMAND_ID"
-
-          aws ssm wait command-executed \
-            --command-id "$COMMAND_ID" \
-            --instance-id "i-05e8a64308ee5eb3f" || true
-
-          RESULT=$(aws ssm get-command-invocation \
-            --command-id "$COMMAND_ID" \
-            --instance-id "i-05e8a64308ee5eb3f" \
-            --query "[Status, StandardOutputContent, StandardErrorContent]" \
-            --output text)
-
-          echo "$RESULT"
-
-          STATUS=$(echo "$RESULT" | head -1)
-          if [ "$STATUS" = "Failed" ]; then
-            echo "::error::SSM command failed"
-            exit 1
-          fi

@@ -12,8 +12,7 @@ const messages = {
     'collect.sendFailed': 'ccusage-ralphgrip: Send failed:',
 
     // catchup.mjs
-    'catchup.usage': 'Usage: node catchup.mjs [--all] [--session <sessionId>] [--codex-session <threadId>]',
-    'catchup.optAll': '  --all                 Backfill all unsent sessions, ignoring the 7-day limit.',
+    'catchup.usage': 'Usage: node catchup.mjs [--session <sessionId>] [--codex-session <threadId>]',
     'catchup.optSession': '  --session <sessionId> Sync one specific OpenCode session immediately.',
     'catchup.optCodex': '  --codex-session <id> Sync one specific Codex session immediately.',
     'catchup.failed': 'ccusage-ralphgrip: catch-up failed ({sessionId}):',
@@ -43,10 +42,6 @@ const messages = {
     'init.marketplaceRegistered': '✓ Marketplace registered: {url}',
     'init.marketplaceCacheCleaned': '✓ Removed old marketplace plugin cache: {path}',
     'init.autoUpdateEnabled': '✓ Marketplace auto-update enabled',
-    'init.backfillStart': 'Backfilling all unsent sessions...',
-    'init.backfillDone': '✓ Backfill complete: {total} session(s) sent',
-    'init.backfillEmpty': '✓ Backfill complete: no unsent sessions',
-    'init.backfillFailed': '⚠ Backfill failed (config and plugin activation succeeded): {error}',
     'init.authRequired': '⚠ No member name and no auth token. Please authenticate to use email identity:',
     'init.authOptional': 'To enable server authentication, run:',
     'init.authOptionalNote': '(Authentication is optional — reports will include your member name)',
@@ -85,8 +80,7 @@ const messages = {
     'collect.sendFailed': 'ccusage-ralphgrip: 전송 실패:',
 
     // catchup.mjs
-    'catchup.usage': '사용법: node catchup.mjs [--all] [--session <sessionId>] [--codex-session <threadId>]',
-    'catchup.optAll': '  --all                 7일 제한 없이 미전송 세션 전체 backfill',
+    'catchup.usage': '사용법: node catchup.mjs [--session <sessionId>] [--codex-session <threadId>]',
     'catchup.optSession': '  --session <sessionId> 특정 OpenCode 세션 즉시 동기화',
     'catchup.optCodex': '  --codex-session <id> 특정 Codex 세션 즉시 동기화',
     'catchup.failed': 'ccusage-ralphgrip: catch-up 실패 ({sessionId}):',
@@ -116,10 +110,6 @@ const messages = {
     'init.marketplaceRegistered': '✓ 마켓플레이스 등록 완료: {url}',
     'init.marketplaceCacheCleaned': '✓ 기존 marketplace 플러그인 캐시 제거: {path}',
     'init.autoUpdateEnabled': '✓ 마켓플레이스 자동 업데이트 활성화',
-    'init.backfillStart': '과거 전체 미전송 세션 backfill 시작...',
-    'init.backfillDone': '✓ backfill 완료: {total}개 세션 전송',
-    'init.backfillEmpty': '✓ backfill 완료: 미전송 세션 없음',
-    'init.backfillFailed': '⚠ backfill 실패 (설정과 플러그인 활성화는 정상 완료): {error}',
     'init.authRequired': '⚠ 이름과 인증 토큰이 없습니다. 이메일 기반 인증을 진행하세요:',
     'init.authOptional': '서버 인증을 진행하려면 다음 명령을 실행하세요:',
     'init.authOptionalNote': '(인증 없이도 기존 방식으로 동작합니다)',

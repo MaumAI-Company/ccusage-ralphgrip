@@ -11,7 +11,7 @@ export function AuthGate() {
       <div className="bg-[#18181b] rounded-xl border border-zinc-800 p-8 max-w-sm w-full text-center space-y-6">
         <div className="space-y-2">
           <div className="text-2xl">◆</div>
-          <h1 className="text-lg font-semibold text-zinc-100">ccusage-worv</h1>
+          <h1 className="text-lg font-semibold text-zinc-100">ccusage-ralphgrip</h1>
           <p className="text-sm text-zinc-500">Team Usage Dashboard</p>
         </div>
 

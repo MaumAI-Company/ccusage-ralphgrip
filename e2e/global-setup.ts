@@ -32,9 +32,9 @@ function getProjectId(): string {
     const configPath = path.join(DASHBOARD_DIR, 'supabase', 'config.toml');
     const config = require('fs').readFileSync(configPath, 'utf-8');
     const match = config.match(/project_id\s*=\s*"([^"]+)"/);
-    return match ? match[1] : 'ccusage-worv-local';
+    return match ? match[1] : 'ccusage-ralphgrip-local';
   } catch {
-    return 'ccusage-worv-local';
+    return 'ccusage-ralphgrip-local';
   }
 }
 

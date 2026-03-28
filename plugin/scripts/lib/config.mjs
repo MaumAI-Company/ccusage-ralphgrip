@@ -30,14 +30,14 @@ export function validateMemberName(name) {
   if (typeof name !== 'string' || name.length === 0) return;
   if (!NAME_ALLOWED_RE.test(name)) {
     process.stderr.write(
-      `[ccusage-worv] Warning: memberName "${name}" contains disallowed characters. ` +
+      `[ccusage-ralphgrip] Warning: memberName "${name}" contains disallowed characters. ` +
       'Only Latin/Korean letters, digits, spaces, hyphens, periods, and apostrophes are allowed.\n',
     );
   }
 }
 
 /**
- * Config schema (~/.ccusage-worv.json):
+ * Config schema (~/.ccusage-ralphgrip.json):
  *   memberName   - team member display name
  *   serverUrl    - dashboard server URL
  *   apiKey?      - legacy API key (backward compat)

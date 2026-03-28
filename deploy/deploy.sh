@@ -4,7 +4,7 @@ set -euo pipefail
 # SSM에서 HOME이 설정되지 않는 문제 방지
 export HOME="${HOME:-/root}"
 
-APP_DIR="/opt/ccusage-worv"
+APP_DIR="/opt/ccusage-ralphgrip"
 cd "$APP_DIR"
 
 echo "[deploy] Pulling latest changes..."

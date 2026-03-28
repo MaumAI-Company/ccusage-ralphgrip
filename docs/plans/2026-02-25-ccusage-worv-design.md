@@ -1,7 +1,7 @@
-# ccusage-worv Design Document
+# ccusage-ralphgrip Design Document
 
 **Date**: 2026-02-25
-**Project**: ccusage-worv — Claude Code 팀 사용량 수집 및 대시보드
+**Project**: ccusage-ralphgrip — Claude Code 팀 사용량 수집 및 대시보드
 
 ## 목적
 
@@ -20,12 +20,12 @@
 ### 프로젝트 구조 (pnpm monorepo)
 
 ```
-ccusage-worv/
+ccusage-ralphgrip/
 ├── packages/
 │   ├── collector/        ← Claude Code Hook용 경량 스크립트
 │   │   ├── src/
 │   │   │   ├── index.ts          ← 엔트리포인트
-│   │   │   ├── config.ts         ← 설정 관리 (~/.ccusage-worv.json)
+│   │   │   ├── config.ts         ← 설정 관리 (~/.ccusage-ralphgrip.json)
 │   │   │   ├── parser.ts         ← JSONL 파싱
 │   │   │   ├── sender.ts         ← 데이터 전송 (추상화 레이어)
 │   │   │   ├── paths.ts          ← OS별 Claude 경로 감지
@@ -66,10 +66,10 @@ collector: HTTP POST ──────────→ Dashboard API Route
 
 ### Collector 동작
 
-1. **초기 설정**: `npx ccusage-worv init`
+1. **초기 설정**: `npx ccusage-ralphgrip init`
    - 팀원 이름 입력
    - 서버 URL 입력
-   - `~/.ccusage-worv.json` 생성
+   - `~/.ccusage-ralphgrip.json` 생성
    - Claude Code settings.json에 Hook 자동 등록
 
 2. **Hook 트리거**: Claude Code 세션 종료 시
@@ -77,7 +77,7 @@ collector: HTTP POST ──────────→ Dashboard API Route
    - 토큰/비용 집계
    - HTTP POST로 서버에 전송
 
-3. **설정 파일** (`~/.ccusage-worv.json`):
+3. **설정 파일** (`~/.ccusage-ralphgrip.json`):
    ```json
    {
      "memberName": "홍길동",

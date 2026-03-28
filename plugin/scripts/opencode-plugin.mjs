@@ -8,8 +8,8 @@ const PLUGIN_BASE_DIR = join(
   '.claude',
   'plugins',
   'cache',
-  'worv',
-  'ccusage-worv',
+  'ralphgrip',
+  'ccusage-ralphgrip',
 );
 const IDLE_SYNC_DELAY_MS = 65_000;
 
@@ -84,7 +84,7 @@ export const ccusageWorv = async ({ client }) => {
     try {
       await client.app.log({
         body: {
-          service: 'ccusage-worv',
+          service: 'ccusage-ralphgrip',
           level: 'error',
           message,
           extra: {
@@ -100,7 +100,7 @@ export const ccusageWorv = async ({ client }) => {
   const syncSession = async (sessionId) => {
     const pluginRoot = resolvePluginRoot();
     if (!pluginRoot) {
-      const message = '[ccusage-worv] Plugin cache not found.';
+      const message = '[ccusage-ralphgrip] Plugin cache not found.';
       console.error(message);
       await logError(message);
       return;
@@ -110,7 +110,7 @@ export const ccusageWorv = async ({ client }) => {
       await runOpenCodeCatchup(pluginRoot, sessionId);
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
-      const message = `[ccusage-worv] OpenCode sync failed for ${sessionId}: ${reason}`;
+      const message = `[ccusage-ralphgrip] OpenCode sync failed for ${sessionId}: ${reason}`;
       console.error(message);
       await logError(message, error);
     }

@@ -1,7 +1,7 @@
 {
-  "name": "ccusage-worv",
+  "name": "ccusage-ralphgrip",
   "version": "0.5.4",
   "description": "Claude Code, OpenCode, Codex CLI, Gemini CLI 사용량을 자동 수집해 중앙 서버로 전송하는 플러그인.",
   "author": { "name": "MaumAI-Company" },
-  "repository": "https://github.com/MaumAI-Company/ccusage-worv"
+  "repository": "https://github.com/MaumAI-Company/ccusage-ralphgrip"
 }

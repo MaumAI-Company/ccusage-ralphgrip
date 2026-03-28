@@ -14,7 +14,7 @@ OAUTH_CLIENT_SECRET=<client-secret>
 SESSION_SECRET=<base64-encoded-32-byte-secret>
 
 # Optional overrides (uncomment if needed)
-# AUTH_REDIRECT_URI=https://ccusage.worvgrip.com/api/auth/callback
+# AUTH_REDIRECT_URI=https://ccusage.ralphgrip.com/api/auth/callback
 # AUTH_ALLOWLIST_ENABLED=true
 
 # WARNING: NEVER set AUTH_TEST_BYPASS=true in production
@@ -27,8 +27,8 @@ SESSION_SECRET=<base64-encoded-32-byte-secret>
 ```bash
 # 1. Clone repo
 cd /opt
-sudo git clone https://github.com/MaumAI-Company/ccusage-worv.git
-cd ccusage-worv
+sudo git clone https://github.com/MaumAI-Company/ccusage-ralphgrip.git
+cd ccusage-ralphgrip
 pnpm install
 
 # 2. 환경변수 설정
@@ -43,7 +43,7 @@ sudo cp deploy/nginx-ccusage.conf /etc/nginx/conf.d/ccusage.conf
 sudo nginx -t && sudo systemctl reload nginx
 
 # 5. SSL
-sudo certbot --nginx -d ccusage.worvgrip.com
+sudo certbot --nginx -d ccusage.ralphgrip.com
 
 # 6. PM2 시작
 pm2 start ecosystem.config.cjs

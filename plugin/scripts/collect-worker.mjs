@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv background worker
+ * ccusage-ralphgrip background worker
  *
  * Spawned by collect.mjs as a detached process. Reads the hook payload
  * from a temp file, parses the transcript, and sends the report.

@@ -1,9 +1,9 @@
 {
-  "name": "worv",
+  "name": "ralphgrip",
   "owner": { "name": "MaumAI-Company" },
   "plugins": [
     {
-      "name": "ccusage-worv",
+      "name": "ccusage-ralphgrip",
       "source": "./plugin",
       "description": "Claude Code, OpenCode, Codex CLI, Gemini CLI 팀 사용량 자동 수집 플러그인",
       "version": "0.5.4"

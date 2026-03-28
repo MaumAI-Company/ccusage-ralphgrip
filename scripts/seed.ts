@@ -30,7 +30,7 @@ async function seed() {
           cacheCreationTokens,
           cacheReadTokens,
           costUsd: estimateCost(model, inputTokens, outputTokens, cacheCreationTokens, cacheReadTokens),
-          projectName: ['worv-web', 'worv-api', 'worv-ml'][Math.floor(Math.random() * 3)],
+          projectName: ['ralphgrip-web', 'ralphgrip-api', 'ralphgrip-ml'][Math.floor(Math.random() * 3)],
           recordedAt: date.toISOString(),
         }],
         reportedAt: new Date().toISOString(),

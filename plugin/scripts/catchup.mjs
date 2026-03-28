@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv Catch-up script
+ * ccusage-ralphgrip Catch-up script
  *
  * SessionStart catches unsent Claude sessions, OpenCode can invoke the same
  * entrypoint with a specific session ID, Gemini CLI can replay saved chat
@@ -37,14 +37,12 @@ function readStdin() {
 function printUsage() {
   console.log(t('catchup.usage'));
   console.log('');
-  console.log(t('catchup.optAll'));
   console.log(t('catchup.optSession'));
   console.log(t('catchup.optCodex'));
 }
 
 function parseCliArgs(argv) {
   const options = {
-    all: false,
     sessionId: null,
     codexSessionId: null,
     activeWindowMs: DEFAULT_ACTIVE_WINDOW_MS,
@@ -52,11 +50,6 @@ function parseCliArgs(argv) {
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
-
-    if (arg === '--all') {
-      options.all = true;
-      continue;
-    }
 
     if (arg === '--session') {
       options.sessionId = argv[index + 1] || null;
@@ -165,7 +158,6 @@ async function resolveRunOptions() {
 }
 
 function resolveCutoff(options) {
-  if (options.all) return 0;
   return Date.now() - DEFAULT_MAX_AGE_MS;
 }
 
@@ -667,7 +659,7 @@ function cleanupOldVersions() {
   const currentVersion = getPluginVersion();
   if (!currentVersion || currentVersion === 'unknown') return;
 
-  const parentDir = join(homedir(), '.claude', 'plugins', 'ccusage-worv');
+  const parentDir = join(homedir(), '.claude', 'plugins', 'ccusage-ralphgrip');
   if (!existsSync(parentDir)) return;
 
   try {
@@ -695,6 +687,6 @@ if (isDirectRun) {
     console.error(t('catchup.synced', { total }));
   }
   if (updateInfo?.hasUpdate) {
-    console.error(`ccusage-worv: update available (${updateInfo.currentVersion} → ${updateInfo.latestVersion}). Claude Code: /plugin marketplace update worv | Others: curl -sL ${config.serverUrl}/api/install | bash`);
+    console.error(`ccusage-ralphgrip: update available (${updateInfo.currentVersion} → ${updateInfo.latestVersion}). Claude Code: /plugin marketplace update ralphgrip | Others: curl -sL ${config.serverUrl}/api/install | bash`);
   }
 }

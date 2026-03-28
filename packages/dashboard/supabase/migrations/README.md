@@ -1,6 +1,6 @@
 # Database Migrations
 
-This directory contains all Supabase schema migrations for the ccusage-worv dashboard.
+This directory contains all Supabase schema migrations for the ccusage-ralphgrip dashboard.
 
 ## Directory structure
 

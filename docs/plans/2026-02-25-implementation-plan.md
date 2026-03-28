@@ -1,4 +1,4 @@
-# ccusage-worv Implementation Plan
+# ccusage-ralphgrip Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -22,14 +22,14 @@
 **Step 1: Git 초기화 및 루트 package.json 생성**
 
 ```bash
-cd ~/projects/ccusage-worv
+cd ~/projects/ccusage-ralphgrip
 git init
 ```
 
 ```json
 // package.json
 {
-  "name": "ccusage-worv",
+  "name": "ccusage-ralphgrip",
   "private": true,
   "scripts": {
     "dev": "pnpm --filter dashboard dev",
@@ -105,7 +105,7 @@ git commit -m "chore: init monorepo scaffold"
 
 ```json
 {
-  "name": "@ccusage-worv/shared",
+  "name": "@ccusage-ralphgrip/shared",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -263,12 +263,12 @@ git commit -m "feat: add shared types and schema"
 
 ```json
 {
-  "name": "@ccusage-worv/collector",
+  "name": "@ccusage-ralphgrip/collector",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "bin": {
-    "ccusage-worv": "./dist/cli.js"
+    "ccusage-ralphgrip": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -276,7 +276,7 @@ git commit -m "feat: add shared types and schema"
     "dev": "tsx src/cli.ts"
   },
   "dependencies": {
-    "@ccusage-worv/shared": "workspace:*"
+    "@ccusage-ralphgrip/shared": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
@@ -312,7 +312,7 @@ export function getClaudeProjectsDir(): string {
 }
 
 export function getConfigPath(): string {
-  return join(homedir(), '.ccusage-worv.json');
+  return join(homedir(), '.ccusage-ralphgrip.json');
 }
 
 export function getClaudeSettingsPath(): string {
@@ -330,7 +330,7 @@ import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
-const TEST_DIR = join(tmpdir(), 'ccusage-worv-test');
+const TEST_DIR = join(tmpdir(), 'ccusage-ralphgrip-test');
 
 describe('parseJsonlFile', () => {
   it('parses valid JSONL lines with usage data', () => {
@@ -397,7 +397,7 @@ describe('aggregateByModel', () => {
 ```typescript
 // packages/collector/src/parser.ts
 import { readFileSync } from 'node:fs';
-import type { ClaudeUsageEntry, UsageRecord } from '@ccusage-worv/shared';
+import type { ClaudeUsageEntry, UsageRecord } from '@ccusage-ralphgrip/shared';
 
 export function parseJsonlFile(filePath: string): ClaudeUsageEntry[] {
   const content = readFileSync(filePath, 'utf-8');
@@ -452,7 +452,7 @@ export function aggregateByModel(entries: ClaudeUsageEntry[]): UsageRecord[] {
 **Step 5: 테스트 실행**
 
 ```bash
-cd ~/projects/ccusage-worv && pnpm install && pnpm --filter @ccusage-worv/collector test
+cd ~/projects/ccusage-ralphgrip && pnpm install && pnpm --filter @ccusage-ralphgrip/collector test
 ```
 
 **Step 6: 커밋**
@@ -477,7 +477,7 @@ git commit -m "feat: add JSONL parser with tests"
 // packages/collector/src/config.ts
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { getConfigPath } from './paths.js';
-import type { CollectorConfig } from '@ccusage-worv/shared';
+import type { CollectorConfig } from '@ccusage-ralphgrip/shared';
 
 export function loadConfig(): CollectorConfig | null {
   const configPath = getConfigPath();
@@ -497,7 +497,7 @@ export function saveConfig(config: CollectorConfig): void {
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { getClaudeSettingsPath } from './paths.js';
 
-const HOOK_COMMAND = 'npx @ccusage-worv/collector collect';
+const HOOK_COMMAND = 'npx @ccusage-ralphgrip/collector collect';
 
 export function registerHook(): void {
   const settingsPath = getClaudeSettingsPath();
@@ -549,7 +549,7 @@ import { collect } from './index.js';
 async function init() {
   const rl = createInterface({ input: stdin, output: stdout });
 
-  console.log('=== ccusage-worv 초기 설정 ===\n');
+  console.log('=== ccusage-ralphgrip 초기 설정 ===\n');
 
   const memberName = await rl.question('팀원 이름을 입력하세요: ');
   const serverUrl = await rl.question('서버 URL을 입력하세요 (기본: http://localhost:3000): ');
@@ -575,7 +575,7 @@ if (command === 'init') {
 } else if (command === 'collect') {
   collect().catch(console.error);
 } else {
-  console.log('Usage: ccusage-worv <init|collect>');
+  console.log('Usage: ccusage-ralphgrip <init|collect>');
 }
 ```
 
@@ -598,7 +598,7 @@ git commit -m "feat: add collector config, hooks, and CLI"
 
 ```typescript
 // packages/collector/src/sender.ts
-import type { UsageReport } from '@ccusage-worv/shared';
+import type { UsageReport } from '@ccusage-ralphgrip/shared';
 
 export async function sendReport(serverUrl: string, report: UsageReport, apiKey?: string): Promise<void> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
@@ -626,7 +626,7 @@ import { sendReport } from './sender.js';
 import { globSync } from 'node:fs';
 import { resolve, basename, dirname } from 'node:path';
 import { readdirSync, statSync } from 'node:fs';
-import type { SessionEndInput, UsageReport } from '@ccusage-worv/shared';
+import type { SessionEndInput, UsageReport } from '@ccusage-ralphgrip/shared';
 
 function readStdin(): Promise<string> {
   return new Promise((resolve) => {
@@ -658,7 +658,7 @@ function findJsonlFiles(dir: string): string[] {
 export async function collect(): Promise<void> {
   const config = loadConfig();
   if (!config) {
-    console.error('설정이 없습니다. ccusage-worv init을 먼저 실행하세요.');
+    console.error('설정이 없습니다. ccusage-ralphgrip init을 먼저 실행하세요.');
     process.exit(1);
   }
 
@@ -733,24 +733,24 @@ git commit -m "feat: add collect command with stdin parsing and HTTP sender"
 **Step 1: Next.js 프로젝트 생성**
 
 ```bash
-cd ~/projects/ccusage-worv/packages
+cd ~/projects/ccusage-ralphgrip/packages
 pnpm create next-app dashboard --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-pnpm
 ```
 
 **Step 2: better-sqlite3 설치 및 DB 초기화**
 
 ```bash
-cd ~/projects/ccusage-worv
+cd ~/projects/ccusage-ralphgrip
 pnpm --filter dashboard add better-sqlite3
 pnpm --filter dashboard add -D @types/better-sqlite3
-pnpm --filter dashboard add @ccusage-worv/shared
+pnpm --filter dashboard add @ccusage-ralphgrip/shared
 ```
 
 ```typescript
 // packages/dashboard/src/lib/db.ts
 import Database from 'better-sqlite3';
 import { join } from 'node:path';
-import { CREATE_TABLES_SQL } from '@ccusage-worv/shared';
+import { CREATE_TABLES_SQL } from '@ccusage-ralphgrip/shared';
 
 const DB_PATH = process.env.DATABASE_PATH || join(process.cwd(), 'data.db');
 
@@ -772,7 +772,7 @@ export function getDb(): Database.Database {
 // packages/dashboard/src/lib/repository.ts
 import { randomUUID } from 'node:crypto';
 import { getDb } from './db.js';
-import type { UsageReport, TeamMember, DbUsageRecord } from '@ccusage-worv/shared';
+import type { UsageReport, TeamMember, DbUsageRecord } from '@ccusage-ralphgrip/shared';
 
 export function getOrCreateMember(name: string): TeamMember {
   const db = getDb();
@@ -888,7 +888,7 @@ git commit -m "feat: add dashboard with SQLite DB and repository"
 // packages/dashboard/src/app/api/usage/route.ts
 import { NextResponse } from 'next/server';
 import { insertUsageReport } from '@/lib/repository';
-import type { UsageReport } from '@ccusage-worv/shared';
+import type { UsageReport } from '@ccusage-ralphgrip/shared';
 
 export async function POST(request: Request) {
   try {
@@ -1172,7 +1172,7 @@ export default function Home() {
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">ccusage-worv Dashboard</h1>
+          <h1 className="text-2xl font-bold">ccusage-ralphgrip Dashboard</h1>
           <select
             value={days}
             onChange={(e) => setDays(Number(e.target.value))}
@@ -1313,7 +1313,7 @@ git commit -m "feat: add seed script for test data"
 
 ```bash
 pnpm install
-pnpm --filter @ccusage-worv/collector test
+pnpm --filter @ccusage-ralphgrip/collector test
 pnpm dev &
 sleep 3
 pnpm seed

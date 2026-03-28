@@ -4,7 +4,7 @@ description: Manually sync unsent sessions / 미전송 세션 수동 전송
 
 ## English
 
-Manually catch up unsent ccusage-worv sessions.
+Manually catch up unsent ccusage-ralphgrip sessions.
 
 Run:
 
@@ -24,7 +24,7 @@ Report the result to the user.
 
 ## 한국어
 
-ccusage-worv 미전송 세션을 수동으로 catch-up 합니다.
+ccusage-ralphgrip 미전송 세션을 수동으로 catch-up 합니다.
 
 아래 명령어를 실행하세요:
 

@@ -1,5 +1,5 @@
 /**
- * Lightweight i18n module for ccusage-worv plugin.
+ * Lightweight i18n module for ccusage-ralphgrip plugin.
  *
  * Detects locale from environment variables and provides
  * translated strings in Korean (ko) and English (en, default).
@@ -8,16 +8,16 @@
 const messages = {
   en: {
     // collect.mjs
-    'collect.noConfig': 'ccusage-worv: No config found. Run /ccw-setup first.',
-    'collect.sendFailed': 'ccusage-worv: Send failed:',
+    'collect.noConfig': 'ccusage-ralphgrip: No config found. Run /ccw-setup first.',
+    'collect.sendFailed': 'ccusage-ralphgrip: Send failed:',
 
     // catchup.mjs
     'catchup.usage': 'Usage: node catchup.mjs [--all] [--session <sessionId>] [--codex-session <threadId>]',
     'catchup.optAll': '  --all                 Backfill all unsent sessions, ignoring the 7-day limit.',
     'catchup.optSession': '  --session <sessionId> Sync one specific OpenCode session immediately.',
     'catchup.optCodex': '  --codex-session <id> Sync one specific Codex session immediately.',
-    'catchup.failed': 'ccusage-worv: catch-up failed ({sessionId}):',
-    'catchup.synced': 'ccusage-worv: {total} unsent session(s) synced',
+    'catchup.failed': 'ccusage-ralphgrip: catch-up failed ({sessionId}):',
+    'catchup.synced': 'ccusage-ralphgrip: {total} unsent session(s) synced',
 
     // init.mjs
     'init.usage': 'Usage: node init.mjs [name] [serverUrl]',
@@ -51,29 +51,29 @@ const messages = {
     'init.authOptional': 'To enable server authentication, run:',
     'init.authOptionalNote': '(Authentication is optional — reports will include your member name)',
     'init.loginStart': 'Starting authentication...',
-    'init.loginSkipped': '⚠ Authentication skipped. You can authenticate later with: /ccusage-worv:login',
+    'init.loginSkipped': '⚠ Authentication skipped. You can authenticate later with: /ccusage-ralphgrip:login',
     'init.usage': 'Usage: node init.mjs [serverUrl]',
 
     // installer (install.mjs)
-    'install.title': 'ccusage-worv - Claude/OpenCode/Codex/Gemini CLI usage collection plugin',
+    'install.title': 'ccusage-ralphgrip - Claude/OpenCode/Codex/Gemini CLI usage collection plugin',
     'install.usage': 'Usage:',
-    'install.usageCmd': '  npx ccusage-worv "name"',
+    'install.usageCmd': '  npx ccusage-ralphgrip "name"',
     'install.example': 'Example:',
-    'install.exampleCmd': '  npx ccusage-worv "John"',
-    'install.starting': 'ccusage-worv installation starting...',
+    'install.exampleCmd': '  npx ccusage-ralphgrip "John"',
+    'install.starting': 'ccusage-ralphgrip installation starting...',
     'install.filesDone': '✓ Plugin files installed: {dir}',
     'install.registryDone': '✓ installed_plugins.json registered',
     'install.initError': '⚠ init error:',
     'install.complete': 'Installation complete! Restart Claude Code / OpenCode / Codex CLI / Gemini CLI.',
 
     // curl install script (route.ts)
-    'curl.title': 'ccusage-worv install script',
+    'curl.title': 'ccusage-ralphgrip install script',
     'curl.separator': '=========================',
     'curl.usage': 'Usage:',
-    'curl.usageCmd': '  curl -sL https://ccusage.worvgrip.com/api/install | bash -s -- "name"',
+    'curl.usageCmd': '  curl -sL https://ccusage.ralphgrip.com/api/install | bash -s -- "name"',
     'curl.example': 'Example:',
-    'curl.exampleCmd': '  curl -sL https://ccusage.worvgrip.com/api/install | bash -s -- "John"',
-    'curl.starting': 'ccusage-worv installation starting...',
+    'curl.exampleCmd': '  curl -sL https://ccusage.ralphgrip.com/api/install | bash -s -- "John"',
+    'curl.starting': 'ccusage-ralphgrip installation starting...',
     'curl.filesDone': '✓ Plugin files installed: $PLUGIN_DIR',
     'curl.registryDone': '✓ installed_plugins.json updated',
     'curl.complete': 'Installation complete! Restart Claude Code.',
@@ -81,16 +81,16 @@ const messages = {
 
   ko: {
     // collect.mjs
-    'collect.noConfig': 'ccusage-worv: 설정이 없습니다. /ccw-setup을 먼저 실행하세요.',
-    'collect.sendFailed': 'ccusage-worv: 전송 실패:',
+    'collect.noConfig': 'ccusage-ralphgrip: 설정이 없습니다. /ccw-setup을 먼저 실행하세요.',
+    'collect.sendFailed': 'ccusage-ralphgrip: 전송 실패:',
 
     // catchup.mjs
     'catchup.usage': '사용법: node catchup.mjs [--all] [--session <sessionId>] [--codex-session <threadId>]',
     'catchup.optAll': '  --all                 7일 제한 없이 미전송 세션 전체 backfill',
     'catchup.optSession': '  --session <sessionId> 특정 OpenCode 세션 즉시 동기화',
     'catchup.optCodex': '  --codex-session <id> 특정 Codex 세션 즉시 동기화',
-    'catchup.failed': 'ccusage-worv: catch-up 실패 ({sessionId}):',
-    'catchup.synced': 'ccusage-worv: 미전송 {total}개 세션 동기화 완료',
+    'catchup.failed': 'ccusage-ralphgrip: catch-up 실패 ({sessionId}):',
+    'catchup.synced': 'ccusage-ralphgrip: 미전송 {total}개 세션 동기화 완료',
 
     // init.mjs
     'init.usage': '사용법: node init.mjs [이름] [서버URL]',
@@ -124,29 +124,29 @@ const messages = {
     'init.authOptional': '서버 인증을 진행하려면 다음 명령을 실행하세요:',
     'init.authOptionalNote': '(인증 없이도 기존 방식으로 동작합니다)',
     'init.loginStart': '인증을 시작합니다...',
-    'init.loginSkipped': '⚠ 인증을 건너뛰었습니다. 나중에 /ccusage-worv:login 으로 인증할 수 있습니다.',
+    'init.loginSkipped': '⚠ 인증을 건너뛰었습니다. 나중에 /ccusage-ralphgrip:login 으로 인증할 수 있습니다.',
     'init.usage': '사용법: node init.mjs [서버URL]',
 
     // installer (install.mjs)
-    'install.title': 'ccusage-worv - Claude/OpenCode/Codex/Gemini CLI 사용량 수집 플러그인',
+    'install.title': 'ccusage-ralphgrip - Claude/OpenCode/Codex/Gemini CLI 사용량 수집 플러그인',
     'install.usage': '사용법:',
-    'install.usageCmd': '  npx ccusage-worv "이름"',
+    'install.usageCmd': '  npx ccusage-ralphgrip "이름"',
     'install.example': '예시:',
-    'install.exampleCmd': '  npx ccusage-worv "홍길동"',
-    'install.starting': 'ccusage-worv 설치 시작...',
+    'install.exampleCmd': '  npx ccusage-ralphgrip "홍길동"',
+    'install.starting': 'ccusage-ralphgrip 설치 시작...',
     'install.filesDone': '✓ 플러그인 파일 설치: {dir}',
     'install.registryDone': '✓ installed_plugins.json 등록 완료',
     'install.initError': '⚠ init 실행 중 오류:',
     'install.complete': '설치 완료! Claude Code / OpenCode / Codex CLI / Gemini CLI를 재시작하세요.',
 
     // curl install script (route.ts)
-    'curl.title': 'ccusage-worv 설치 스크립트',
+    'curl.title': 'ccusage-ralphgrip 설치 스크립트',
     'curl.separator': '=========================',
     'curl.usage': '사용법:',
-    'curl.usageCmd': '  curl -sL https://ccusage.worvgrip.com/api/install | bash -s -- "이름"',
+    'curl.usageCmd': '  curl -sL https://ccusage.ralphgrip.com/api/install | bash -s -- "이름"',
     'curl.example': '예시:',
-    'curl.exampleCmd': '  curl -sL https://ccusage.worvgrip.com/api/install | bash -s -- "홍길동"',
-    'curl.starting': 'ccusage-worv 설치 시작...',
+    'curl.exampleCmd': '  curl -sL https://ccusage.ralphgrip.com/api/install | bash -s -- "홍길동"',
+    'curl.starting': 'ccusage-ralphgrip 설치 시작...',
     'curl.filesDone': '✓ 플러그인 파일 설치 완료: $PLUGIN_DIR',
     'curl.registryDone': '✓ installed_plugins.json 업데이트 완료',
     'curl.complete': '설치 완료! Claude Code를 재시작하세요.',

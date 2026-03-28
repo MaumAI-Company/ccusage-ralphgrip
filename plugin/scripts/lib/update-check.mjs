@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { homedir } from 'node:os';
 import { getPluginVersion } from './config.mjs';
 
-const CACHE_DIR = join(homedir(), '.ccusage-worv-cache');
+const CACHE_DIR = join(homedir(), '.ccusage-ralphgrip-cache');
 const CACHE_FILE = join(CACHE_DIR, 'version-check.json');
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 

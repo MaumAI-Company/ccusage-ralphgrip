@@ -21,14 +21,14 @@ export function AppHeader({
           <Link
             href="/"
             className="app-header-brand"
-            aria-label="ccusage-worv dashboard"
+            aria-label="ccusage-ralphgrip dashboard"
           >
             <div className="app-header-brand-mark" aria-hidden="true">
               ◆
             </div>
             <div className="app-header-brand-text">
               <span className="app-header-brand-name">ccusage</span>
-              <span className="app-header-brand-suffix">-worv</span>
+              <span className="app-header-brand-suffix">-ralphgrip</span>
             </div>
           </Link>
 

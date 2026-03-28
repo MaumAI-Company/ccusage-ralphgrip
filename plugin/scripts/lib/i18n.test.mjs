@@ -8,12 +8,12 @@ describe('i18n', () => {
   });
 
   it('returns English string by default', () => {
-    assert.equal(t('collect.sendFailed'), 'ccusage-worv: Send failed:');
+    assert.equal(t('collect.sendFailed'), 'ccusage-ralphgrip: Send failed:');
   });
 
   it('returns Korean string when locale is ko', () => {
     setLocale('ko');
-    assert.equal(t('collect.sendFailed'), 'ccusage-worv: 전송 실패:');
+    assert.equal(t('collect.sendFailed'), 'ccusage-ralphgrip: 전송 실패:');
   });
 
   it('interpolates params', () => {
@@ -39,7 +39,7 @@ describe('i18n', () => {
     setLocale('ko');
     // All keys should exist in both, but test fallback
     const result = t('collect.noConfig');
-    assert.ok(result.includes('ccusage-worv'));
+    assert.ok(result.includes('ccusage-ralphgrip'));
   });
 
   it('getLocale returns en or ko', () => {

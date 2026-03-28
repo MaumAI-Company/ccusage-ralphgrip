@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv heartbeat — Stop hook entry point
+ * ccusage-ralphgrip heartbeat — Stop hook entry point
  *
  * Fires on every assistant turn end. Checks a marker file mtime to throttle
  * utilization reports to once per 5 minutes. If throttled, exits immediately

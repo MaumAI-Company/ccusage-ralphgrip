@@ -1,12 +1,12 @@
 {
-  "name": "worv",
-  "description": "WoRV team plugins marketplace",
+  "name": "ralphgrip",
+  "description": "Ralphthon team plugins marketplace",
   "owner": {
     "name": "MaumAI-Company"
   },
   "plugins": [
     {
-      "name": "ccusage-worv",
+      "name": "ccusage-ralphgrip",
       "description": "Claude Code, OpenCode, Codex CLI, Gemini CLI 팀 사용량 자동 수집 플러그인",
       "version": "0.5.4",
       "author": {
@@ -14,7 +14,7 @@
       },
       "source": "./",
       "category": "productivity",
-      "homepage": "https://github.com/MaumAI-Company/ccusage-worv"
+      "homepage": "https://github.com/MaumAI-Company/ccusage-ralphgrip"
     }
   ]
 }

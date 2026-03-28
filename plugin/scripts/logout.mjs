@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv logout command
+ * ccusage-ralphgrip logout command
  *
  * Clears OAuth tokens from the config file.
  * Preserves other config fields (serverUrl, memberName, etc.).

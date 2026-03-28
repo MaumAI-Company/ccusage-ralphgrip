@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv SessionEnd hook handler
+ * ccusage-ralphgrip SessionEnd hook handler
  *
  * Reads stdin from Claude Code, then spawns a detached background process
  * to do the actual work (parsing, network I/O, reporting). The hook itself
@@ -28,7 +28,7 @@ const raw = await readStdin();
 if (!raw.trim()) process.exit(0);
 
 // Write payload to temp file so the background worker can read it
-const payloadDir = join(tmpdir(), 'ccusage-worv');
+const payloadDir = join(tmpdir(), 'ccusage-ralphgrip');
 mkdirSync(payloadDir, { recursive: true });
 const payloadPath = join(payloadDir, `payload-${Date.now()}-${process.pid}.json`);
 writeFileSync(payloadPath, raw);

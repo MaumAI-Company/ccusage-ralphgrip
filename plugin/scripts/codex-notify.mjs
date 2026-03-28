@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { runCodexCatchup } from './catchup.mjs';
 
 const execFileAsync = promisify(execFile);
-const STATE_PATH = join(homedir(), '.codex', 'ccusage-worv-notify.json');
+const STATE_PATH = join(homedir(), '.codex', 'ccusage-ralphgrip-notify.json');
 const SELF_PATH = fileURLToPath(import.meta.url);
 const CHILD_ENV_FLAG = 'CCW_CODEX_NOTIFY_CHILD';
 const SYNC_MAX_ATTEMPTS = 20;

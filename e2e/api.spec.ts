@@ -247,7 +247,7 @@ test.describe('GET /api/install', () => {
 
     const body = await res.text();
     expect(body).toContain('#!/bin/bash');
-    expect(body).toContain('ccusage-worv');
+    expect(body).toContain('ccusage-ralphgrip');
 
     const transcriptsModule = extractInstalledFile(body, 'scripts/lib/transcripts.mjs');
     expect(transcriptsModule).toContain('<synthetic>');

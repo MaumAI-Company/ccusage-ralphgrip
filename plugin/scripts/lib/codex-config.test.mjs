@@ -30,9 +30,9 @@ test('updateTopLevelNotifyCommand replaces existing notify arrays', () => {
     'trust_level = "trusted"',
   ].join('\n');
 
-  const updated = updateTopLevelNotifyCommand(config, ['node', '/tmp/ccusage-worv.mjs']);
+  const updated = updateTopLevelNotifyCommand(config, ['node', '/tmp/ccusage-ralphgrip.mjs']);
 
-  assert.match(updated, /^# comment\nnotify = \["node", "\/tmp\/ccusage-worv\.mjs"\]\nmodel = "gpt-5\.4"/);
+  assert.match(updated, /^# comment\nnotify = \["node", "\/tmp\/ccusage-ralphgrip\.mjs"\]\nmodel = "gpt-5\.4"/);
   assert.doesNotMatch(updated, /original\.mjs/);
 });
 
@@ -45,7 +45,7 @@ test('updateTopLevelNotifyCommand inserts notify before the first table when mis
     'trust_level = "trusted"',
   ].join('\n');
 
-  const updated = updateTopLevelNotifyCommand(config, ['node', '/tmp/ccusage-worv.mjs']);
+  const updated = updateTopLevelNotifyCommand(config, ['node', '/tmp/ccusage-ralphgrip.mjs']);
 
-  assert.match(updated, /^# comment\nmodel = "gpt-5\.4"\n\nnotify = \["node", "\/tmp\/ccusage-worv\.mjs"\]\n\[projects\."\/tmp"\]/);
+  assert.match(updated, /^# comment\nmodel = "gpt-5\.4"\n\nnotify = \["node", "\/tmp\/ccusage-ralphgrip\.mjs"\]\n\[projects\."\/tmp"\]/);
 });

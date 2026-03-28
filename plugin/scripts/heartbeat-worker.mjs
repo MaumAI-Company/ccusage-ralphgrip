@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv heartbeat background worker
+ * ccusage-ralphgrip heartbeat background worker
  *
  * Spawned by heartbeat.mjs as a detached process.
  * Fetches current utilization from Anthropic API and sends to the

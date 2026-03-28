@@ -1,5 +1,5 @@
 {
-  "name": "ccusage-worv",
+  "name": "ccusage-ralphgrip",
   "private": true,
   "scripts": {
     "dev": "pnpm --filter dashboard dev",

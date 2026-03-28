@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { AppHeader, HeaderDivider, HeaderLink } from '@/components/AppHeader';
 
-const INSTALL_URL = 'https://ccusage.worvgrip.com/api/install';
+const INSTALL_URL = 'https://ccusage.ralphgrip.com/api/install';
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -220,12 +220,12 @@ export default function SetupPage() {
             <StepCard number={1} title={t('step1Title')}>
               <p style={{ fontSize: '13px', color: '#a1a1aa', lineHeight: 1.7, marginBottom: '12px' }}>
                 <code style={{ color: '#c4b5fd', background: 'rgba(99,102,241,0.1)', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>
-                  ~/.ccusage-worv.json
+                  ~/.ccusage-ralphgrip.json
                 </code>
                 {t('step1Desc')}
               </p>
               <CodeBlock>{`{
-  "serverUrl": "https://ccusage.worvgrip.com"
+  "serverUrl": "https://ccusage.ralphgrip.com"
 }`}</CodeBlock>
             </StepCard>
 
@@ -297,7 +297,7 @@ export default function SetupPage() {
                   <span key={i}>{line}{i === 0 && <br />}</span>
                 ))}
               </p>
-              <CodeBlock>/ccusage-worv:login</CodeBlock>
+              <CodeBlock>/ccusage-ralphgrip:login</CodeBlock>
               <p style={{ fontSize: '12px', color: '#71717a', lineHeight: 1.6, marginTop: '12px' }}>
                 {t('authNote')}
               </p>
@@ -321,9 +321,9 @@ export default function SetupPage() {
             <div className="glass-card" style={{ borderRadius: '14px', padding: '24px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  { cmd: '/ccusage-worv:login', desc: t('loginDesc') },
-                  { cmd: '/ccusage-worv:logout', desc: t('logoutDesc') },
-                  { cmd: '/ccusage-worv:sync', desc: t('syncDesc') },
+                  { cmd: '/ccusage-ralphgrip:login', desc: t('loginDesc') },
+                  { cmd: '/ccusage-ralphgrip:logout', desc: t('logoutDesc') },
+                  { cmd: '/ccusage-ralphgrip:sync', desc: t('syncDesc') },
                 ].map((item) => (
                   <div
                     key={item.cmd}
@@ -443,7 +443,7 @@ npm install -g @google/gemini-cli
               Verify Installation
             </h2>
             <StepCard number={1} title={t('verifyStep1')}>
-              <CodeBlock>cat ~/.ccusage-worv.json</CodeBlock>
+              <CodeBlock>cat ~/.ccusage-ralphgrip.json</CodeBlock>
             </StepCard>
             <StepCard number={2} title={t('verifyStep2')}>
               <CodeBlock>{`cat ~/.claude/settings.json | grep ccusage

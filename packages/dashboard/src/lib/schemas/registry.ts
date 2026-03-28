@@ -134,7 +134,7 @@ export function generateOpenAPIDocument() {
   return generator.generateDocument({
     openapi: '3.1.0',
     info: {
-      title: 'ccusage-worv Dashboard API',
+      title: 'ccusage-ralphgrip Dashboard API',
       version: '1.0.0',
       description: 'Team usage collection dashboard API',
     },

@@ -9,7 +9,7 @@ type PluginFile = {
   contentBase64: string;
 };
 
-const MARKETPLACE_KEY = 'ccusage-worv@worv';
+const MARKETPLACE_KEY = 'ccusage-ralphgrip@ralphgrip';
 const REPO_ROOT_CANDIDATES = [
   join(process.cwd(), 'plugin'),
   join(process.cwd(), '..', '..', 'plugin'),
@@ -31,7 +31,7 @@ function generateInstallScript(): string {
     version?: string;
   };
   const pluginVersion = pluginJson.version || '0.1.0';
-  const pluginDir = `$HOME/.claude/plugins/ccusage-worv/${pluginVersion}`;
+  const pluginDir = `$HOME/.claude/plugins/ccusage-ralphgrip/${pluginVersion}`;
   const pluginFiles = collectPluginFiles(pluginRoot);
 
   return [
@@ -59,14 +59,14 @@ function generateInstallScript(): string {
     '',
     '# Marketplace URL (HTTPS default, --ssh for SSH)',
     'if $USE_SSH; then',
-    '  MARKETPLACE_URL="git@github.com:MaumAI-Company/ccusage-worv.git"',
+    '  MARKETPLACE_URL="git@github.com:MaumAI-Company/ccusage-ralphgrip.git"',
     'else',
-    '  MARKETPLACE_URL="https://github.com/MaumAI-Company/ccusage-worv.git"',
+    '  MARKETPLACE_URL="https://github.com/MaumAI-Company/ccusage-ralphgrip.git"',
     'fi',
     '',
     '# If no name given, try to read from existing config (update mode)',
     'if [ -z "$NAME" ]; then',
-    '  CONFIG_FILE="$HOME/.ccusage-worv.json"',
+    '  CONFIG_FILE="$HOME/.ccusage-ralphgrip.json"',
     '  if [ -f "$CONFIG_FILE" ]; then',
     `    NAME=$(node -e "try{const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf-8'));if(c.memberName)console.log(c.memberName)}catch{}" "$CONFIG_FILE")`,
     '  fi',
@@ -80,16 +80,16 @@ function generateInstallScript(): string {
     `PLUGIN_DIR="${pluginDir}"`,
     '',
     'echo ""',
-    'msg "ccusage-worv installation starting..." "ccusage-worv 설치 시작..."',
+    'msg "ccusage-ralphgrip installation starting..." "ccusage-ralphgrip 설치 시작..."',
     'echo ""',
     '',
     '# --- Remove old marketplace cache and old versions ---',
-    'OLD_CACHE="$HOME/.claude/plugins/cache/worv"',
+    'OLD_CACHE="$HOME/.claude/plugins/cache/ralphgrip"',
     'if [ -d "$OLD_CACHE" ]; then',
     '  rm -rf "$OLD_CACHE" && msg "✓ Removed old marketplace cache" "✓ 기존 marketplace 캐시 제거"',
     'fi',
     `CURRENT_VERSION="${pluginVersion}"`,
-    'NEW_PARENT="$HOME/.claude/plugins/ccusage-worv"',
+    'NEW_PARENT="$HOME/.claude/plugins/ccusage-ralphgrip"',
     'if [ -d "$NEW_PARENT" ]; then',
     '  for d in "$NEW_PARENT"/*/; do',
     '    DIR_NAME="$(basename "$d")"',
@@ -125,7 +125,7 @@ function generateInstallScript(): string {
     "let data = { version: 2, plugins: {} };",
     "try { data = JSON.parse(fs.readFileSync(path, 'utf-8')); } catch {}",
     'if (!data.plugins) data.plugins = {};',
-    "for (const k of Object.keys(data.plugins)) { if (k.includes('ccusage-worv')) delete data.plugins[k]; }",
+    "for (const k of Object.keys(data.plugins)) { if (k.includes('ccusage-ralphgrip')) delete data.plugins[k]; }",
     'data.plugins[pluginKey] = [{',
     "  scope: 'user',",
     '  installPath,',
@@ -146,7 +146,7 @@ function generateInstallScript(): string {
     "let settings = {};",
     "try { settings = JSON.parse(fs.readFileSync(settingsPath, 'utf-8')); } catch {}",
     'if (!settings.extraKnownMarketplaces) settings.extraKnownMarketplaces = {};',
-    "settings.extraKnownMarketplaces.worv = { source: { source: 'path', path: pluginDir } };",
+    "settings.extraKnownMarketplaces.ralphgrip = { source: { source: 'path', path: pluginDir } };",
     "fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\\n');",
     '" "$SETTINGS_FILE" "$PLUGIN_DIR"',
     'msg "✓ Marketplace registered in settings" "✓ 마켓플레이스 설정 등록 완료"',

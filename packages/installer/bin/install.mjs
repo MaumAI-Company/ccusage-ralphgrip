@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv 설치 스크립트
+ * ccusage-ralphgrip 설치 스크립트
  *
- * 사용법: npx ccusage-worv "이름"
+ * 사용법: npx ccusage-ralphgrip "이름"
  *
  * 1. plugin/ 디렉토리를 ~/.claude/plugins/cache/ 에 복사
  * 2. installed_plugins.json 등록
@@ -22,24 +22,24 @@ function t(key) {
   return (_isKo ? _ko : _en)[key] || key;
 }
 const _en = {
-  'install.title': 'ccusage-worv - Claude/OpenCode/Codex/Gemini CLI usage collection plugin',
+  'install.title': 'ccusage-ralphgrip - Claude/OpenCode/Codex/Gemini CLI usage collection plugin',
   'install.usage': 'Usage:',
-  'install.usageCmd': '  npx ccusage-worv "name"',
+  'install.usageCmd': '  npx ccusage-ralphgrip "name"',
   'install.example': 'Example:',
-  'install.exampleCmd': '  npx ccusage-worv "John"',
-  'install.starting': 'ccusage-worv installation starting...',
+  'install.exampleCmd': '  npx ccusage-ralphgrip "John"',
+  'install.starting': 'ccusage-ralphgrip installation starting...',
   'install.filesDone': '✓ Plugin files installed:',
   'install.registryDone': '✓ installed_plugins.json registered',
   'install.initError': '⚠ init error:',
   'install.complete': 'Installation complete! Restart Claude Code / OpenCode / Codex CLI / Gemini CLI.',
 };
 const _ko = {
-  'install.title': 'ccusage-worv - Claude/OpenCode/Codex/Gemini CLI 사용량 수집 플러그인',
+  'install.title': 'ccusage-ralphgrip - Claude/OpenCode/Codex/Gemini CLI 사용량 수집 플러그인',
   'install.usage': '사용법:',
-  'install.usageCmd': '  npx ccusage-worv "이름"',
+  'install.usageCmd': '  npx ccusage-ralphgrip "이름"',
   'install.example': '예시:',
-  'install.exampleCmd': '  npx ccusage-worv "홍길동"',
-  'install.starting': 'ccusage-worv 설치 시작...',
+  'install.exampleCmd': '  npx ccusage-ralphgrip "홍길동"',
+  'install.starting': 'ccusage-ralphgrip 설치 시작...',
   'install.filesDone': '✓ 플러그인 파일 설치:',
   'install.registryDone': '✓ installed_plugins.json 등록 완료',
   'install.initError': '⚠ init 실행 중 오류:',
@@ -54,9 +54,9 @@ const PLUGIN_SOURCE = existsSync(join(PACKAGE_ROOT, 'plugin'))
   : join(PACKAGE_ROOT, '..', '..', 'plugin');
 
 const VERSION = JSON.parse(readFileSync(join(PACKAGE_ROOT, 'package.json'), 'utf-8')).version;
-const PLUGIN_DIR = join(homedir(), '.claude', 'plugins', 'ccusage-worv', VERSION);
+const PLUGIN_DIR = join(homedir(), '.claude', 'plugins', 'ccusage-ralphgrip', VERSION);
 const INSTALLED_PATH = join(homedir(), '.claude', 'plugins', 'installed_plugins.json');
-const PLUGIN_KEY = 'ccusage-worv@worv';
+const PLUGIN_KEY = 'ccusage-ralphgrip@ralphgrip';
 
 const memberName = process.argv[2];
 
@@ -81,12 +81,12 @@ console.log('');
 
 try {
   // Remove old marketplace cache entirely
-  const oldCachePath = join(homedir(), '.claude', 'plugins', 'cache', 'worv');
+  const oldCachePath = join(homedir(), '.claude', 'plugins', 'cache', 'ralphgrip');
   if (existsSync(oldCachePath)) {
     rmSync(oldCachePath, { recursive: true, force: true });
     console.log(`✓ Removed old marketplace cache: ${oldCachePath}`);
   }
-  // Old versions under ~/.claude/plugins/ccusage-worv/<version>/ are NOT deleted
+  // Old versions under ~/.claude/plugins/ccusage-ralphgrip/<version>/ are NOT deleted
   // here — a running session may still reference the old CLAUDE_PLUGIN_ROOT.
   // Cleanup happens on the next SessionStart via catchup.mjs instead.
 } catch {}
@@ -108,9 +108,9 @@ if (existsSync(INSTALLED_PATH)) {
 }
 if (!installed.plugins) installed.plugins = {};
 
-// Remove all stale ccusage-worv entries (old path keys and marketplace keys)
+// Remove all stale ccusage-ralphgrip entries (old path keys and marketplace keys)
 for (const key of Object.keys(installed.plugins)) {
-  if (key.includes('ccusage-worv')) {
+  if (key.includes('ccusage-ralphgrip')) {
     delete installed.plugins[key];
   }
 }
@@ -135,7 +135,7 @@ try {
     settings = JSON.parse(readFileSync(SETTINGS_PATH, 'utf-8'));
   }
   if (!settings.extraKnownMarketplaces) settings.extraKnownMarketplaces = {};
-  settings.extraKnownMarketplaces.worv = { source: { source: 'path', path: PLUGIN_DIR } };
+  settings.extraKnownMarketplaces.ralphgrip = { source: { source: 'path', path: PLUGIN_DIR } };
   writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2) + '\n');
   console.log('✓ Marketplace registered in settings');
 } catch {}

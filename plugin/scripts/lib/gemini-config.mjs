@@ -1,4 +1,4 @@
-export const GEMINI_CCUSAGE_HOOK_NAME = 'ccusage-worv-session-end';
+export const GEMINI_CCUSAGE_HOOK_NAME = 'ccusage-ralphgrip-session-end';
 
 function cloneSettings(settings) {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) {
@@ -16,7 +16,7 @@ export function createGeminiSessionEndHook(command) {
   return {
     hooks: [{
       name: GEMINI_CCUSAGE_HOOK_NAME,
-      description: 'Sync Gemini CLI usage to ccusage-worv after each session.',
+      description: 'Sync Gemini CLI usage to ccusage-ralphgrip after each session.',
       type: 'command',
       command,
       timeout: 15000,

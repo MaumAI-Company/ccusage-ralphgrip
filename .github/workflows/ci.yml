@@ -89,7 +89,7 @@ jobs:
               git checkout -- packages/dashboard/supabase/config.toml
 
               # Apply port overrides
-              sed -i "s/ccusage-worv-local/${PROJECT_ID}/" packages/dashboard/supabase/config.toml
+              sed -i "s/ccusage-ralphgrip-local/${PROJECT_ID}/" packages/dashboard/supabase/config.toml
               sed -i "s/^port = 54351$/port = $API_PORT/" packages/dashboard/supabase/config.toml
               sed -i "s/^port = 54352$/port = $DB_PORT/" packages/dashboard/supabase/config.toml
               sed -i "s/^shadow_port = 54350$/shadow_port = $SHADOW_PORT/" packages/dashboard/supabase/config.toml
@@ -174,7 +174,7 @@ jobs:
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "i-05e8a64308ee5eb3f" \
             --document-name "AWS-RunShellScript" \
-            --parameters '{"commands":["cd /opt/ccusage-worv && git checkout -- . && git pull origin main && pnpm install --frozen-lockfile && pnpm --filter dashboard build && HOME=/root pm2 reload ccusage-dashboard --update-env || HOME=/root pm2 start ecosystem.config.cjs && HOME=/root pm2 save"]}' \
+            --parameters '{"commands":["cd /opt/ccusage-ralphgrip && git checkout -- . && git pull origin main && pnpm install --frozen-lockfile && pnpm --filter dashboard build && HOME=/root pm2 reload ccusage-dashboard --update-env || HOME=/root pm2 start ecosystem.config.cjs && HOME=/root pm2 save"]}' \
             --query "Command.CommandId" \
             --output text)
 

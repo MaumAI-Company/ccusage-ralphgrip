@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv authenticate command
+ * ccusage-ralphgrip authenticate command
  *
  * Uses the server's device challenge flow:
  * 1. Request a challenge from the server

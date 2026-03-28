@@ -1,4 +1,4 @@
-# ccusage-worv 배포 가이드
+# ccusage-ralphgrip 배포 가이드
 
 ## 서버 정보
 
@@ -7,8 +7,8 @@
 | 서비스 | AWS EC2 (ap-northeast-2) |
 | 인스턴스 ID | `i-05e8a64308ee5eb3f` |
 | 접속 방식 | AWS SSM (SSH 포트 미개방) |
-| 앱 경로 | `/opt/ccusage-worv` |
-| 도메인 | `ccusage.worvgrip.com` |
+| 앱 경로 | `/opt/ccusage-ralphgrip` |
+| 도메인 | `ccusage.ralphgrip.com` |
 | 포트 | 3002 (PM2 → Next.js) |
 | PM2 프로세스명 | `ccusage-dashboard` |
 | 같은 EC2 | worvgrip(worvk) 앱과 동일 서버 (worvk: 3000, MCP: 3001) |
@@ -23,7 +23,7 @@
 aws ssm send-command \
   --instance-ids "i-05e8a64308ee5eb3f" \
   --document-name "AWS-RunShellScript" \
-  --parameters 'commands=["cd /opt/ccusage-worv && bash deploy/deploy.sh"]' \
+  --parameters 'commands=["cd /opt/ccusage-ralphgrip && bash deploy/deploy.sh"]' \
   --region ap-northeast-2
 ```
 
@@ -45,7 +45,7 @@ aws ssm start-session \
 
 # 접속 후
 export HOME=/root
-cd /opt/ccusage-worv
+cd /opt/ccusage-ralphgrip
 bash deploy/deploy.sh
 ```
 
@@ -84,7 +84,7 @@ pm2 logs ccusage-dashboard --lines 50
 
 # 2. 완전 삭제 후 재시작
 pm2 delete ccusage-dashboard
-cd /opt/ccusage-worv && pm2 start ecosystem.config.cjs && pm2 save
+cd /opt/ccusage-ralphgrip && pm2 start ecosystem.config.cjs && pm2 save
 ```
 
 ### 알려진 이슈
@@ -110,7 +110,7 @@ cd /opt/ccusage-worv && pm2 start ecosystem.config.cjs && pm2 save
 
 ### 환경변수
 
-EC2의 `/opt/ccusage-worv/packages/dashboard/.env.local`:
+EC2의 `/opt/ccusage-ralphgrip/packages/dashboard/.env.local`:
 
 ```
 SUPABASE_URL=<supabase-project-url>

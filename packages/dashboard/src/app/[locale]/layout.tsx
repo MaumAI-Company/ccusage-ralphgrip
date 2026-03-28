@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ccusage-worv | Team Usage Dashboard",
+  title: "ccusage-ralphgrip | Team Usage Dashboard",
   description:
     "Monitor Claude, OpenAI, Gemini, and OpenCode usage and costs across your team",
 };

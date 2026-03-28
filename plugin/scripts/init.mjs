@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * ccusage-worv 초기 설정 스크립트
+ * ccusage-ralphgrip 초기 설정 스크립트
  *
  * 사용법: node init.mjs [serverUrl]
  *
  * 7단계 수행:
- * 1. ~/.ccusage-worv.json에 설정 저장
+ * 1. ~/.ccusage-ralphgrip.json에 설정 저장
  * 2. ~/.claude/settings.json의 enabledPlugins에 플러그인 등록
- * 3. ~/.config/opencode/plugins/ccusage-worv.mjs 설치
+ * 3. ~/.config/opencode/plugins/ccusage-ralphgrip.mjs 설치
  * 4. ~/.gemini/settings.json의 SessionEnd hook 연결
  * 5. ~/.codex/config.toml의 user-level notify hook 연결
  * 6. 과거 전체 미전송 세션 backfill
@@ -22,7 +22,6 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CONFIG_PATH } from './lib/common.mjs';
 import { t } from './lib/i18n.mjs';
-import { runCatchup } from './catchup.mjs';
 import { extractTopLevelNotifyCommand, updateTopLevelNotifyCommand } from './lib/codex-config.mjs';
 import { updateGeminiSettings, hasGeminiSessionEndHook } from './lib/gemini-config.mjs';
 
@@ -31,18 +30,18 @@ const GEMINI_SETTINGS_PATH = join(homedir(), '.gemini', 'settings.json');
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const PLUGIN_ROOT = dirname(SCRIPT_DIR);
 
-const PLUGIN_KEY = 'ccusage-worv@worv';
-const DEFAULT_MARKETPLACE_URL = 'https://github.com/MaumAI-Company/ccusage-worv.git';
+const PLUGIN_KEY = 'ccusage-ralphgrip@ralphgrip';
+const DEFAULT_MARKETPLACE_URL = 'https://github.com/MaumAI-Company/ccusage-ralphgrip.git';
 const OPENCODE_PLUGIN_SOURCE = join(SCRIPT_DIR, 'opencode-plugin.mjs');
-const OPENCODE_PLUGIN_PATH = join(homedir(), '.config', 'opencode', 'plugins', 'ccusage-worv.mjs');
+const OPENCODE_PLUGIN_PATH = join(homedir(), '.config', 'opencode', 'plugins', 'ccusage-ralphgrip.mjs');
 const GEMINI_COLLECT_SOURCE = join(SCRIPT_DIR, 'collect.mjs');
 const CODEX_NOTIFY_SOURCE = join(SCRIPT_DIR, 'codex-notify.mjs');
 const CODEX_CONFIG_PATH = join(homedir(), '.codex', 'config.toml');
-const CODEX_NOTIFY_STATE_PATH = join(homedir(), '.codex', 'ccusage-worv-notify.json');
+const CODEX_NOTIFY_STATE_PATH = join(homedir(), '.codex', 'ccusage-ralphgrip-notify.json');
 
 // Parse args: positional args + --marketplace-url flag
 let memberName = '';
-let serverUrl = 'https://ccusage.worvgrip.com';
+let serverUrl = 'https://ccusage.ralphgrip.com';
 let marketplaceUrl = DEFAULT_MARKETPLACE_URL;
 const positional = [];
 for (let i = 2; i < process.argv.length; i++) {
@@ -88,7 +87,7 @@ function buildGeminiHookCommand(scriptPath) {
 
 // Clean up old plugin versions (keep only current version)
 try {
-  const cacheParent = join(homedir(), '.claude', 'plugins', 'cache', 'worv', 'ccusage-worv');
+  const cacheParent = join(homedir(), '.claude', 'plugins', 'cache', 'ralphgrip', 'ccusage-ralphgrip');
   if (existsSync(cacheParent)) {
     for (const entry of readdirSync(cacheParent, { withFileTypes: true })) {
       if (entry.isDirectory()) {
@@ -115,10 +114,10 @@ try {
     settings.enabledPlugins = {};
   }
 
-  // Remove stale path-based keys pointing to other ccusage-worv versions
+  // Remove stale path-based keys pointing to other ccusage-ralphgrip versions
   let changed = false;
   for (const key of Object.keys(settings.enabledPlugins)) {
-    if (key !== PLUGIN_KEY && key.includes('ccusage-worv')) {
+    if (key !== PLUGIN_KEY && key.includes('ccusage-ralphgrip')) {
       delete settings.enabledPlugins[key];
       changed = true;
     }
@@ -134,9 +133,9 @@ try {
 
   // Register marketplace so Claude Code can discover and update the plugin
   if (!settings.extraKnownMarketplaces) settings.extraKnownMarketplaces = {};
-  const currentSource = settings.extraKnownMarketplaces.worv?.source?.url;
+  const currentSource = settings.extraKnownMarketplaces.ralphgrip?.source?.url;
   if (currentSource !== marketplaceUrl) {
-    settings.extraKnownMarketplaces.worv = { source: { source: 'git', url: marketplaceUrl } };
+    settings.extraKnownMarketplaces.ralphgrip = { source: { source: 'git', url: marketplaceUrl } };
     changed = true;
     console.log(t('init.marketplaceRegistered', { url: marketplaceUrl }));
   }
@@ -152,15 +151,15 @@ try {
     if (existsSync(knownPath)) {
       known = JSON.parse(readFileSync(knownPath, 'utf-8'));
     }
-    if (!known.worv || !known.worv.autoUpdate) {
-      if (!known.worv) {
-        known.worv = {
+    if (!known.ralphgrip || !known.ralphgrip.autoUpdate) {
+      if (!known.ralphgrip) {
+        known.ralphgrip = {
           source: { source: 'git', url: marketplaceUrl },
-          installLocation: join(homedir(), '.claude', 'plugins', 'marketplaces', 'worv'),
+          installLocation: join(homedir(), '.claude', 'plugins', 'marketplaces', 'ralphgrip'),
           lastUpdated: new Date().toISOString(),
         };
       }
-      known.worv.autoUpdate = true;
+      known.ralphgrip.autoUpdate = true;
       writeFileSync(knownPath, JSON.stringify(known, null, 2));
       console.log(t('init.autoUpdateEnabled'));
     }
@@ -245,19 +244,7 @@ try {
   console.error(`  notify = ["node", "${CODEX_NOTIFY_SOURCE}"]`);
 }
 
-console.log('');
-console.log(t('init.backfillStart'));
-
-try {
-  const result = await runCatchup(config, { all: true });
-  if (result.total > 0) {
-    console.log(t('init.backfillDone', { total: result.total }));
-  } else {
-    console.log(t('init.backfillEmpty'));
-  }
-} catch (error) {
-  console.error(t('init.backfillFailed', { error: error.message }));
-}
+console.error('[ccusage-ralphgrip] Setup complete.');
 
 // Login flow — run authenticate.mjs interactively (non-blocking: init succeeds even if skipped)
 if (!config.accessToken) {

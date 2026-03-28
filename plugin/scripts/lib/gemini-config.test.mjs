@@ -8,13 +8,13 @@ import {
   updateGeminiSettings,
 } from './gemini-config.mjs';
 
-const COMMAND = 'node "/tmp/ccusage-worv/collect.mjs"';
+const COMMAND = 'node "/tmp/ccusage-ralphgrip/collect.mjs"';
 
 test('createGeminiSessionEndHook builds a managed SessionEnd command hook', () => {
   assert.deepEqual(createGeminiSessionEndHook(COMMAND), {
     hooks: [{
       name: GEMINI_CCUSAGE_HOOK_NAME,
-      description: 'Sync Gemini CLI usage to ccusage-worv after each session.',
+      description: 'Sync Gemini CLI usage to ccusage-ralphgrip after each session.',
       type: 'command',
       command: COMMAND,
       timeout: 15000,

@@ -50,7 +50,7 @@ export async function fetchUtilization() {
   try {
     const accessToken = loadClaudeAccessToken();
     if (!accessToken) {
-      console.error('[ccusage-worv] utilization: no OAuth token found (credentials file and keychain both empty)');
+      console.error('[ccusage-ralphgrip] utilization: no OAuth token found (credentials file and keychain both empty)');
       return null;
     }
 
@@ -63,7 +63,7 @@ export async function fetchUtilization() {
     });
 
     if (!response.ok) {
-      console.error(`[ccusage-worv] utilization: API returned ${response.status}`);
+      console.error(`[ccusage-ralphgrip] utilization: API returned ${response.status}`);
       return null;
     }
 
@@ -71,12 +71,12 @@ export async function fetchUtilization() {
     const result = normalizeUtilizationResponse(data);
 
     if (result.fiveHour === null && result.sevenDay === null) {
-      console.error('[ccusage-worv] utilization: API returned no usable data (response keys: ' + Object.keys(data || {}).join(', ') + ')');
+      console.error('[ccusage-ralphgrip] utilization: API returned no usable data (response keys: ' + Object.keys(data || {}).join(', ') + ')');
     }
 
     return result;
   } catch (err) {
-    console.error(`[ccusage-worv] utilization: fetch failed — ${err.message}`);
+    console.error(`[ccusage-ralphgrip] utilization: fetch failed — ${err.message}`);
     return null;
   }
 }

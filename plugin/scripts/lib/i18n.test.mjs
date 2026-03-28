@@ -26,8 +26,8 @@ describe('i18n', () => {
   it('interpolates params in Korean', () => {
     setLocale('ko');
     assert.equal(
-      t('init.backfillDone', { total: '5' }),
-      '✓ backfill 완료: 5개 세션 전송',
+      t('init.configSaved', { path: '/tmp/test.json' }),
+      '✓ 설정 저장 완료: /tmp/test.json',
     );
   });
 

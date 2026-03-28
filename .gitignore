@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.next/
+*.db
+.env
+.env.local
+.turbo
+.mcp.json
+
+.omx/
+.omc/
+.supabase/
+
+# Supabase local
+packages/dashboard/supabase/snippets/

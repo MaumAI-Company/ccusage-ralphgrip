@@ -1,0 +1,449 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ccusage-worv Dashboard API",
+    "version": "1.0.0",
+    "description": "Team usage collection dashboard API"
+  },
+  "components": {
+    "schemas": {},
+    "parameters": {}
+  },
+  "paths": {
+    "/api/usage": {
+      "post": {
+        "summary": "Submit usage report",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "memberName": {
+                    "type": "string"
+                  },
+                  "sessionId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 512
+                  },
+                  "records": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "model": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256
+                        },
+                        "inputTokens": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100000000
+                        },
+                        "outputTokens": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100000000
+                        },
+                        "cacheCreationTokens": {
+                          "type": "number",
+                          "default": 0
+                        },
+                        "cacheReadTokens": {
+                          "type": "number",
+                          "default": 0
+                        },
+                        "costUsd": {
+                          "type": "number"
+                        },
+                        "projectName": {
+                          "type": "string",
+                          "maxLength": 256,
+                          "default": ""
+                        },
+                        "recordedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "model",
+                        "inputTokens",
+                        "outputTokens",
+                        "recordedAt"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 100
+                  },
+                  "reportedAt": {
+                    "type": "string"
+                  },
+                  "toolUsage": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "toolName": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "callCount": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "acceptCount": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "rejectCount": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "toolName",
+                        "callCount",
+                        "acceptCount",
+                        "rejectCount"
+                      ]
+                    }
+                  },
+                  "turnCount": {
+                    "type": "number"
+                  },
+                  "utilization": {
+                    "type": "object",
+                    "properties": {
+                      "fiveHour": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "sevenDay": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "fiveHourResetsAt": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "sevenDayResetsAt": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "fiveHour",
+                      "sevenDay"
+                    ]
+                  },
+                  "pluginVersion": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "sessionId",
+                  "records"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stats": {
+      "get": {
+        "summary": "Get dashboard statistics",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365,
+              "default": 30
+            },
+            "required": false,
+            "name": "days",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stats response"
+          }
+        }
+      }
+    },
+    "/api/plans": {
+      "get": {
+        "summary": "List member plans",
+        "responses": {
+          "200": {
+            "description": "Array of member plans"
+          }
+        }
+      },
+      "post": {
+        "summary": "Upsert member plan",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "memberId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "planName": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "billingStart": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "isPersonal": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "note": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "default": null
+                  }
+                },
+                "required": [
+                  "memberId",
+                  "planName",
+                  "billingStart"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/budgets": {
+      "get": {
+        "summary": "List budgets and members",
+        "responses": {
+          "200": {
+            "description": "Budgets and members"
+          }
+        }
+      },
+      "post": {
+        "summary": "Upsert budget",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "memberId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i",
+                    "default": null
+                  },
+                  "budgetType": {
+                    "type": "string",
+                    "enum": [
+                      "weekly",
+                      "monthly"
+                    ]
+                  },
+                  "budgetUsd": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000
+                  }
+                },
+                "required": [
+                  "budgetType",
+                  "budgetUsd"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report": {
+      "get": {
+        "summary": "Get usage report",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365,
+              "default": 30
+            },
+            "required": false,
+            "name": "days",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregated report data"
+          }
+        }
+      }
+    },
+    "/api/weekly-ranking": {
+      "get": {
+        "summary": "Get weekly ranking",
+        "parameters": [
+          {
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "maximum": 0,
+              "default": 0
+            },
+            "required": false,
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Weekly ranking and previous week top"
+          }
+        }
+      }
+    },
+    "/api/sse/stats": {
+      "get": {
+        "summary": "Subscribe to live stats updates via SSE",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365,
+              "default": 30
+            },
+            "required": false,
+            "name": "days",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events stream with stats updates",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event": {
+                      "type": "string",
+                      "enum": [
+                        "init",
+                        "update",
+                        "heartbeat"
+                      ]
+                    },
+                    "data": {}
+                  },
+                  "required": [
+                    "event"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

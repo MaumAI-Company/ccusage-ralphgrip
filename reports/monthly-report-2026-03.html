@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Usage Report - 2026년 3월</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0f1117;--card:#1a1d2e;--card-hover:#222640;--border:#2a2e45;--text:#e4e4e7;--text-muted:#9ca3af;--accent:#6366f1;--accent-light:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--blue:#3b82f6;--purple:#a855f7;--cyan:#06b6d4}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+  .container{max-width:1400px;margin:0 auto;padding:2rem}
+  .header{text-align:center;margin-bottom:3rem;padding:3rem 2rem;background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#1e1b4b 100%);border-radius:20px;border:1px solid var(--border);position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 70%,rgba(99,102,241,.1) 0%,transparent 50%),radial-gradient(circle at 70% 30%,rgba(168,85,247,.08) 0%,transparent 50%);animation:pulse 8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+  .header h1{font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#c7d2fe,#e0e7ff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;z-index:1}
+  .header .subtitle{color:var(--text-muted);font-size:1.1rem;margin-top:.5rem;position:relative;z-index:1}
+  .header .period{display:inline-block;margin-top:1rem;padding:.4rem 1.2rem;background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.3);border-radius:20px;font-size:.9rem;color:var(--accent-light);position:relative;z-index:1}
+  .header .scope-badge{display:inline-block;margin-top:.6rem;padding:.3rem .8rem;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:12px;font-size:.8rem;color:#86efac;position:relative;z-index:1}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+  .kpi-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:all .3s ease}
+  .kpi-card:hover{background:var(--card-hover);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+  .kpi-card .label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .kpi-card .value{font-size:1.9rem;font-weight:800;margin:.3rem 0;letter-spacing:-.02em}
+  .kpi-card .sub{font-size:.78rem;color:var(--text-muted)}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:1.4rem;font-weight:700;margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:.6rem}
+  .section-title .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--accent);color:white;border-radius:8px;font-size:.9rem;font-weight:700}
+  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+  .chart-card h3{font-size:1rem;font-weight:600;color:var(--text-muted);margin-bottom:1rem}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  @media(max-width:900px){.chart-row{grid-template-columns:1fr}}
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  thead th{background:rgba(99,102,241,.1);color:var(--accent-light);font-weight:600;text-transform:uppercase;font-size:.73rem;letter-spacing:.05em;padding:.75rem .8rem;text-align:left;border-bottom:2px solid var(--border)}
+  thead th.right{text-align:right}
+  tbody td{padding:.65rem .8rem;border-bottom:1px solid rgba(42,46,69,.5)}
+  tbody td.right{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:rgba(99,102,241,.05)}
+  tbody tr.top1{background:rgba(239,68,68,.08)}
+  tbody tr.top2{background:rgba(249,115,22,.06)}
+  tbody tr.top3{background:rgba(245,158,11,.04)}
+  .rank{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:.75rem;font-weight:700}
+  .rank-1{background:#fbbf24;color:#1a1d2e}.rank-2{background:#9ca3af;color:#1a1d2e}.rank-3{background:#d97706;color:#1a1d2e}.rank-other{background:var(--border);color:var(--text-muted)}
+  .badge{display:inline-block;padding:.15rem .5rem;border-radius:6px;font-size:.7rem;font-weight:600;text-transform:uppercase}
+  .badge-max20{background:rgba(168,85,247,.2);color:#c084fc}
+  .badge-max5{background:rgba(59,130,246,.2);color:#93c5fd}
+  .badge-none{background:rgba(156,163,175,.1);color:#6b7280}
+  .bar-bg{height:8px;background:var(--border);border-radius:4px;overflow:hidden;min-width:100px}
+  .bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+  .member-sub{font-size:.72rem;color:var(--text-muted);display:block}
+  .insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem}
+  .insight-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;border-left:4px solid}
+  .insight-card.warning{border-left-color:var(--orange)}.insight-card.danger{border-left-color:var(--red)}
+  .insight-card.info{border-left-color:var(--blue)}.insight-card.success{border-left-color:var(--green)}
+  .insight-card h4{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+  .insight-card p{font-size:.85rem;color:var(--text-muted);line-height:1.7}
+  .insight-card .metric{display:inline-block;font-weight:700;color:var(--text)}
+  .footer{text-align:center;padding:2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem}
+  .fade-in{opacity:0;transform:translateY(20px);animation:fadeIn .6s ease forwards}
+  @keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
+  .delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}.delay-5{animation-delay:.5s}.delay-6{animation-delay:.6s}
+  @media print{body{background:white;color:#1a1a1a}.chart-card,.kpi-card,.insight-card{border:1px solid #ddd;background:white}.header{background:#f0f0ff}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header fade-in">
+    <h1>Claude Code Team Usage Report</h1>
+    <p class="subtitle">WoRV Team &mdash; Monthly Usage Analytics</p>
+    <span class="period">2026-02-18 ~ 2026-03-19 (30 days)</span><br>
+    <span class="scope-badge">Company Accounts Only</span>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card fade-in delay-1"><div class="label">API-Equivalent Cost</div><div class="value" style="color:#f87171">$56,578</div><div class="sub">일평균 $1,886</div></div>
+    <div class="kpi-card fade-in delay-2"><div class="label">Company Subscription</div><div class="value" style="color:#34d399">$1,800<span style="font-size:1rem;color:var(--text-muted)">/월</span></div><div class="sub">MAX20 x8 + MAX5 x2 (10명)</div></div>
+    <div class="kpi-card fade-in delay-3"><div class="label">ROI</div><div class="value" style="color:var(--cyan)">31.4x</div><div class="sub">$56,578 / $1,800</div></div>
+    <div class="kpi-card fade-in delay-4"><div class="label">Sessions</div><div class="value" style="color:var(--blue)">3,471</div><div class="sub">세션당 $16.30</div></div>
+    <div class="kpi-card fade-in delay-5"><div class="label">Active Members</div><div class="value" style="color:var(--green)">12</div><div class="sub">이윤성 설치 대기 (+1)</div></div>
+    <div class="kpi-card fade-in delay-6"><div class="label">Peak Day</div><div class="value" style="color:var(--orange)">$4,533</div><div class="sub">2026-03-12</div></div>
+  </div>
+
+  <!-- 1. Daily -->
+  <div class="section fade-in">
+    <h2 class="section-title"><span class="num">1</span> Daily Cost Trend</h2>
+    <div class="chart-card"><h3>일별 비용 추이 ($) &mdash; 2/27 팀 온보딩 후 본격 사용</h3><canvas id="dailyCostChart" height="100"></canvas></div>
+    <div class="chart-row">
+      <div class="chart-card"><h3>일별 세션 수</h3><canvas id="dailySessionChart" height="120"></canvas></div>
+      <div class="chart-card"><h3>일별 활성 멤버</h3><canvas id="dailyMemberChart" height="120"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 2. Weekly -->
+  <div class="section fade-in">
+    <h2 class="section-title"><span class="num">2</span> Weekly Breakdown</h2>
+    <div class="chart-row">
+      <div class="chart-card"><h3>주간별 비용 ($)</h3><canvas id="weeklyCostChart" height="140"></canvas></div>
+      <div class="chart-card"><h3>주간별 세션 &amp; 멤버</h3><canvas id="weeklySessionChart" height="140"></canvas></div>
+    </div>
+    <div class="chart-card"><div class="table-wrap"><table>
+      <thead><tr><th>Week</th><th>Period</th><th class="right">Cost ($)</th><th class="right">Sessions</th><th class="right">Members</th><th class="right">Avg/Day</th></tr></thead>
+      <tbody>
+        <tr><td>W1</td><td>02/16 ~ 02/22</td><td class="right">1,682</td><td class="right">64</td><td class="right">2</td><td class="right">$240</td></tr>
+        <tr><td>W2</td><td>02/23 ~ 03/01</td><td class="right">9,481</td><td class="right">256</td><td class="right">8</td><td class="right">$1,354</td></tr>
+        <tr><td>W3</td><td>03/02 ~ 03/08</td><td class="right">15,742</td><td class="right">1,028</td><td class="right">12</td><td class="right">$2,249</td></tr>
+        <tr><td>W4</td><td>03/09 ~ 03/15</td><td class="right">19,888</td><td class="right">1,729</td><td class="right">11</td><td class="right">$2,841</td></tr>
+        <tr><td>W5</td><td>03/16 ~ 03/19 (4일)</td><td class="right">9,784</td><td class="right">400</td><td class="right">11</td><td class="right">$2,446</td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+
+  <!-- 3. Members -->
+  <div class="section fade-in">
+    <h2 class="section-title"><span class="num">3</span> Member Usage</h2>
+    <div class="chart-card"><h3>멤버별 비용 ($)</h3><canvas id="memberCostChart" height="110"></canvas></div>
+    <div class="chart-card"><div class="table-wrap"><table>
+      <thead><tr><th>Rank</th><th>Member</th><th>Plan</th><th class="right">Cost ($)</th><th class="right">Share</th><th>Bar</th><th class="right">Sessions</th><th class="right">Days</th><th class="right">$/Sess</th><th class="right">ROI</th></tr></thead>
+      <tbody>
+        <tr class="top1">
+          <td><span class="rank rank-1">1</span></td><td><strong>윤지용</strong><span class="member-sub">hletrd</span></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right"><strong>21,744</strong></td><td class="right">38.4%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div></td>
+          <td class="right">649</td><td class="right">30</td><td class="right">33.50</td><td class="right" style="color:#22c55e">108.7x</td>
+        </tr>
+        <tr class="top2">
+          <td><span class="rank rank-2">2</span></td><td><strong>Ben Baldivia</strong><span class="member-sub">ben_baldivia</span></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right"><strong>10,368</strong></td><td class="right">18.3%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:47.7%;background:linear-gradient(90deg,#f97316,#fb923c)"></div></div></td>
+          <td class="right">740</td><td class="right">18</td><td class="right">14.01</td><td class="right" style="color:#22c55e">51.8x</td>
+        </tr>
+        <tr class="top3">
+          <td><span class="rank rank-3">3</span></td><td><strong>최수환</strong><span class="member-sub">claude</span></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right"><strong>9,645</strong></td><td class="right">17.0%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:44.4%;background:linear-gradient(90deg,#eab308,#facc15)"></div></div></td>
+          <td class="right">292</td><td class="right">22</td><td class="right">33.03</td><td class="right" style="color:#22c55e">48.2x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">4</span></td><td><strong>김성민</strong></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right">3,970</td><td class="right">7.0%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:18.3%;background:var(--accent)"></div></div></td>
+          <td class="right">72</td><td class="right">18</td><td class="right">55.14</td><td class="right" style="color:#22c55e">19.9x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">5</span></td><td><strong>김다혜</strong><span class="member-sub">Da-hye Kim</span></td><td><span class="badge badge-max5">MAX5</span></td>
+          <td class="right">3,519</td><td class="right">6.2%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:16.2%;background:var(--accent)"></div></div></td>
+          <td class="right">277</td><td class="right">15</td><td class="right">12.70</td><td class="right" style="color:#22c55e">35.2x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">6</span></td><td><strong>정재윤</strong><span class="member-sub">jaeyoon + jyjung</span></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right">2,760</td><td class="right">4.9%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:12.7%;background:var(--accent)"></div></div></td>
+          <td class="right">76</td><td class="right">20</td><td class="right">36.32</td><td class="right" style="color:#22c55e">13.8x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">7</span></td><td><strong>서인근</strong><span class="member-sub">inkeun</span></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right">2,400</td><td class="right">4.2%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:11.0%;background:var(--accent)"></div></div></td>
+          <td class="right">1,130</td><td class="right">29</td><td class="right">2.12</td><td class="right" style="color:#22c55e">12.0x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">8</span></td><td><strong>성삼우</strong><span class="member-sub">samwoo</span></td><td><span class="badge badge-max5">MAX5</span></td>
+          <td class="right">752</td><td class="right">1.3%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:3.5%;background:var(--accent)"></div></div></td>
+          <td class="right">61</td><td class="right">18</td><td class="right">12.33</td><td class="right" style="color:#22c55e">7.5x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">9</span></td><td><strong>김선후</strong></td><td><span class="badge badge-none">미설정</span></td>
+          <td class="right">551</td><td class="right">1.0%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:2.5%;background:var(--accent)"></div></div></td>
+          <td class="right">45</td><td class="right">11</td><td class="right">12.25</td><td class="right">-</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">10</span></td><td><strong>조면철</strong></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right">489</td><td class="right">0.9%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:2.2%;background:var(--accent)"></div></div></td>
+          <td class="right">54</td><td class="right">13</td><td class="right">9.05</td><td class="right" style="color:#22c55e">2.4x</td>
+        </tr>
+        <tr>
+          <td><span class="rank rank-other">11</span></td><td><strong>조용준</strong><span class="member-sub">cyjun0304</span></td><td><span class="badge badge-max20">MAX20</span></td>
+          <td class="right">378</td><td class="right">0.7%</td>
+          <td><div class="bar-bg"><div class="bar-fill" style="width:1.7%;background:var(--accent)"></div></div></td>
+          <td class="right">75</td><td class="right">11</td><td class="right">5.05</td><td class="right" style="color:#f59e0b">1.9x</td>
+        </tr>
+      </tbody>
+    </table></div></div>
+
+    <div class="chart-card" style="background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(34,197,94,.04));">
+      <h3>구독 비용 요약</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;text-align:center;padding:.5rem 0;">
+        <div><div style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:600">MAX20 x8</div><div style="font-size:1.6rem;font-weight:800;color:#c084fc">$1,600</div></div>
+        <div><div style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:600">MAX5 x2</div><div style="font-size:1.6rem;font-weight:800;color:#93c5fd">$200</div></div>
+        <div><div style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:600">Total</div><div style="font-size:1.6rem;font-weight:800;color:#34d399">$1,800<span style="font-size:.85rem;color:var(--text-muted)">/월</span></div></div>
+        <div><div style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:600">ROI</div><div style="font-size:1.6rem;font-weight:800;color:var(--cyan)">31.4x</div></div>
+      </div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--text-muted);text-align:center;">
+        * 이윤성(MAX20) 합류 시 $2,000/월 &nbsp;|&nbsp; 김선후 플랜 미설정 &nbsp;|&nbsp; 전원 구독료 대비 1.9x 이상 활용
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Model -->
+  <div class="section fade-in">
+    <h2 class="section-title"><span class="num">4</span> Model Distribution</h2>
+    <div class="chart-row">
+      <div class="chart-card"><h3>모델별 비용</h3><canvas id="modelPieChart" height="160"></canvas></div>
+      <div class="chart-card"><h3>모델별 세션 수</h3><canvas id="modelSessionChart" height="160"></canvas></div>
+    </div>
+    <div class="chart-card"><div class="table-wrap"><table>
+      <thead><tr><th>Model</th><th>Provider</th><th class="right">Cost ($)</th><th class="right">Share</th><th class="right">Sessions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>claude-opus-4-6</strong></td><td>Anthropic</td><td class="right"><strong>53,771</strong></td><td class="right">95.0%</td><td class="right">2,342</td></tr>
+        <tr><td>claude-sonnet-4-6</td><td>Anthropic</td><td class="right">1,072</td><td class="right">1.9%</td><td class="right">199</td></tr>
+        <tr><td>gpt-5.4</td><td>OpenAI</td><td class="right">739</td><td class="right">1.3%</td><td class="right">804</td></tr>
+        <tr><td>gpt-5.3-codex</td><td>OpenAI</td><td class="right">577</td><td class="right">1.0%</td><td class="right">86</td></tr>
+        <tr><td>claude-haiku-4-5</td><td>Anthropic</td><td class="right">172</td><td class="right">0.3%</td><td class="right">174</td></tr>
+        <tr><td>claude-opus-4-5</td><td>Anthropic</td><td class="right">148</td><td class="right">0.3%</td><td class="right">38</td></tr>
+        <tr><td><em>Others (7 models)</em></td><td>-</td><td class="right">99</td><td class="right">0.2%</td><td class="right">39</td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+
+  <!-- 5. Project -->
+  <div class="section fade-in">
+    <h2 class="section-title"><span class="num">5</span> Project Breakdown</h2>
+    <div class="chart-card"><h3>프로젝트별 비용 Top 12 ($)</h3><canvas id="projectChart" height="130"></canvas></div>
+    <div class="chart-card"><div class="table-wrap"><table>
+      <thead><tr><th>Rank</th><th>Project</th><th class="right">Cost ($)</th><th class="right">Sessions</th><th class="right">Members</th></tr></thead>
+      <tbody>
+        <tr class="top1"><td><span class="rank rank-1">1</span></td><td><strong>projects</strong> (shared)</td><td class="right"><strong>19,637</strong></td><td class="right">1,084</td><td class="right">8</td></tr>
+        <tr class="top2"><td><span class="rank rank-2">2</span></td><td>burstpick</td><td class="right">5,808</td><td class="right">46</td><td class="right">1</td></tr>
+        <tr class="top3"><td><span class="rank rank-3">3</span></td><td>vla-evaluation-harness</td><td class="right">2,367</td><td class="right">40</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">4</span></td><td>online-judge</td><td class="right">2,164</td><td class="right">23</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">5</span></td><td>G2</td><td class="right">2,098</td><td class="right">33</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">6</span></td><td>omniverse-connector-unreal</td><td class="right">2,038</td><td class="right">7</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">7</span></td><td>BurstPick (variant)</td><td class="right">1,796</td><td class="right">19</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">8</span></td><td>vla-eval-leaderboard</td><td class="right">1,675</td><td class="right">10</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">9</span></td><td>burstpick-app</td><td class="right">1,634</td><td class="right">3</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">10</span></td><td>RB-Y1</td><td class="right">1,019</td><td class="right">20</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">11</span></td><td>xylolabs-panel-demo</td><td class="right">968</td><td class="right">18</td><td class="right">1</td></tr>
+        <tr><td><span class="rank rank-other">12</span></td><td>reflex-train</td><td class="right">832</td><td class="right">5</td><td class="right">1</td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+
+  <!-- 6. Insights -->
+  <div class="section fade-in">
+    <h2 class="section-title"><span class="num">6</span> Key Insights</h2>
+    <div class="insight-grid">
+      <div class="insight-card success">
+        <h4>월 $1,800 구독으로 $56,578 가치 창출</h4>
+        <p>회사 구독료 <span class="metric">$1,800/월</span> 대비 API 환산 <span class="metric">$56,578</span>로 <span class="metric">31.4x ROI</span>.
+        11명 전원이 구독료 대비 1.9x 이상 활용 중이며, 구독 모델의 비용 효율이 검증되었습니다.</p>
+      </div>
+      <div class="insight-card danger">
+        <h4>상위 3명이 73.8% 차지</h4>
+        <p>윤지용(<span class="metric">$21,744</span>, 38.4%), Ben Baldivia(<span class="metric">$10,368</span>, 18.3%), 최수환(<span class="metric">$9,645</span>, 17.0%)이 전체의 <span class="metric">73.8%</span>.
+        윤지용은 30일 전일 활동으로 rate limit에 근접할 가능성이 있습니다.</p>
+      </div>
+      <div class="insight-card warning">
+        <h4>Opus 4.6 모델 95% 집중</h4>
+        <p>비용의 <span class="metric">95.0%</span>가 claude-opus-4-6. Sonnet(1.9%), Haiku(0.3%)는 거의 미사용.
+        단순 코드 생성/리팩토링에 Sonnet을 활용하면 동일 작업 대비 <span class="metric">60~80%</span> 절감 가능합니다.</p>
+      </div>
+      <div class="insight-card info">
+        <h4>주간 사용량 성장 후 안정화</h4>
+        <p>W1($1,682) → W4($19,888)로 <span class="metric">11.8배</span> 증가 후, W5(4일)는 일평균 $2,446으로 안정적.
+        현재 추세 유지 시 월간 <span class="metric">$60,000~$70,000</span> 수준으로 예상됩니다.</p>
+      </div>
+      <div class="insight-card info">
+        <h4>공유 워크스페이스 34.7%</h4>
+        <p>"projects" 공유 워크스페이스가 <span class="metric">$19,637 (34.7%)</span>로 최대.
+        burstpick 계열 합산 <span class="metric">$9,238</span>, vla-evaluation-harness 계열 합산 <span class="metric">$4,042</span> 순입니다.</p>
+      </div>
+      <div class="insight-card warning">
+        <h4>세션 효율성 편차</h4>
+        <p>서인근 <span class="metric">$2.12</span>/세션 (1,130회 경량 세션) vs 김성민 <span class="metric">$55.14</span>/세션 (72회 고집중 세션).
+        사용 패턴의 차이이며, 김성민은 Opus 장시간 세션을 집중 활용하는 패턴입니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Generated on 2026-03-20 &middot; ccusage-worv &middot; Company accounts only (account_type='company')<br>
+    12 members &middot; $1,800/month subscription (MAX20 x8 + MAX5 x2)
+  </div>
+</div>
+
+<script>
+Chart.defaults.color='#9ca3af';Chart.defaults.borderColor='rgba(42,46,69,0.5)';
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+const C={indigo:'#6366f1',blue:'#3b82f6',green:'#22c55e',red:'#ef4444',orange:'#f59e0b',purple:'#a855f7',cyan:'#06b6d4'};
+const DL=['2/18','2/19','2/20','2/21','2/22','2/23','2/24','2/25','2/26','2/27','2/28','3/1','3/2','3/3','3/4','3/5','3/6','3/7','3/8','3/9','3/10','3/11','3/12','3/13','3/14','3/15','3/16','3/17','3/18','3/19'];
+const DC=[624.17,143.72,751.92,89.54,72.92,31.34,294.25,240.91,763.30,2637.23,2832.26,2682.03,2249.75,2045.75,3240.67,2027.24,2756.65,1808.94,1613.01,1662.76,3501.87,1345.74,4532.86,3183.78,3332.26,2328.79,2074.60,3333.54,3272.53,1103.67];
+const DS=[18,12,14,12,9,8,15,29,17,79,71,41,76,81,160,143,210,213,151,221,439,237,285,198,246,108,154,100,86,64];
+const DM=[2,2,2,2,2,2,2,2,4,8,6,4,5,11,12,11,9,7,7,11,11,11,11,10,7,8,10,9,11,9];
+
+new Chart(document.getElementById('dailyCostChart'),{type:'line',data:{labels:DL,datasets:[{label:'Daily Cost ($)',data:DC,borderColor:C.indigo,backgroundColor:'rgba(99,102,241,0.1)',fill:true,tension:.3,pointRadius:3,pointHoverRadius:6,borderWidth:2},{label:'Avg ($1,886)',data:Array(30).fill(1886),borderColor:'rgba(239,68,68,0.5)',borderDash:[5,5],pointRadius:0,borderWidth:1,fill:false}]},options:{responsive:true,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()}}},interaction:{intersect:false,mode:'index'}}});
+new Chart(document.getElementById('dailySessionChart'),{type:'bar',data:{labels:DL,datasets:[{data:DS,backgroundColor:'rgba(59,130,246,0.6)',borderRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+new Chart(document.getElementById('dailyMemberChart'),{type:'line',data:{labels:DL,datasets:[{data:DM,borderColor:C.green,backgroundColor:'rgba(34,197,94,0.15)',fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:14}}}});
+
+new Chart(document.getElementById('weeklyCostChart'),{type:'bar',data:{labels:['W1','W2','W3','W4','W5'],datasets:[{data:[1682,9481,15742,19888,9784],backgroundColor:['rgba(99,102,241,0.3)','rgba(99,102,241,0.5)','rgba(99,102,241,0.7)','rgba(99,102,241,0.85)','rgba(99,102,241,0.55)'],borderColor:C.indigo,borderWidth:1,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()}}}}});
+new Chart(document.getElementById('weeklySessionChart'),{type:'bar',data:{labels:['W1','W2','W3','W4','W5'],datasets:[{label:'Sessions',data:[64,256,1028,1729,400],backgroundColor:'rgba(59,130,246,0.6)',borderRadius:4,yAxisID:'y'},{label:'Members',data:[2,8,12,11,11],type:'line',borderColor:C.green,pointRadius:5,pointBackgroundColor:C.green,borderWidth:2,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,position:'left',title:{display:true,text:'Sessions'}},y1:{beginAtZero:true,position:'right',max:14,grid:{drawOnChartArea:false},title:{display:true,text:'Members'}}}}});
+
+new Chart(document.getElementById('memberCostChart'),{type:'bar',data:{labels:['윤지용','Ben Baldivia','최수환','김성민','김다혜','정재윤','서인근','성삼우','김선후','조면철','조용준'],datasets:[{data:[21744,10368,9645,3970,3519,2760,2400,752,551,489,378],backgroundColor:['#ef4444','#f97316','#eab308',C.indigo,C.indigo,C.indigo,C.indigo,C.blue,C.blue,C.blue,C.blue],borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()}}}}});
+
+new Chart(document.getElementById('modelPieChart'),{type:'doughnut',data:{labels:['Opus 4.6 ($53,771)','Sonnet 4.6 ($1,072)','GPT-5.4 ($739)','GPT-5.3 Codex ($577)','Haiku 4.5 ($172)','Others ($247)'],datasets:[{data:[53771,1072,739,577,172,247],backgroundColor:[C.indigo,C.blue,C.orange,'#d97706',C.cyan,C.purple],borderWidth:0,hoverOffset:10}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{padding:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>{const t=c.dataset.data.reduce((a,b)=>a+b,0);return '$'+c.parsed.toLocaleString()+' ('+(c.parsed/t*100).toFixed(1)+'%)'}}}}}});
+new Chart(document.getElementById('modelSessionChart'),{type:'doughnut',data:{labels:['Opus 4.6 (2,342)','GPT-5.4 (804)','Sonnet 4.6 (199)','Haiku 4.5 (174)','GPT-5.3 Codex (86)','Others (77)'],datasets:[{data:[2342,804,199,174,86,77],backgroundColor:[C.indigo,C.orange,C.blue,C.cyan,'#d97706',C.purple],borderWidth:0,hoverOffset:10}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{padding:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>{const t=c.dataset.data.reduce((a,b)=>a+b,0);return c.parsed.toLocaleString()+' ('+(c.parsed/t*100).toFixed(1)+'%)'}}}}}});
+
+new Chart(document.getElementById('projectChart'),{type:'bar',data:{labels:['projects','burstpick','vla-eval','online-judge','G2','omniverse','BurstPick','vla-leaderboard','burstpick-app','RB-Y1','xylolabs','reflex-train'],datasets:[{data:[19637,5808,2367,2164,2098,2038,1796,1675,1634,1019,968,832],backgroundColor:['#ef4444',C.indigo,C.indigo,C.indigo,C.indigo,C.blue,C.blue,C.blue,C.blue,C.purple,C.purple,C.purple],borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()}}}}});
+</script>
+</body>
+</html>

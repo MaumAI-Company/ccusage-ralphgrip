@@ -1,0 +1,47 @@
+{
+  "name": "dashboard",
+  "version": "0.2.2",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "generate:openapi": "tsx scripts/generate-openapi.ts",
+    "generate:types": "openapi-typescript public/openapi.json -o src/lib/api-types.ts",
+    "generate": "pnpm generate:openapi && pnpm generate:types",
+    "test": "vitest run",
+    "db:validate": "bash scripts/validate-migrations.sh",
+    "db:new": "echo 'Usage: supabase migration new <name> --workdir packages/dashboard'",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.5.0",
+    "@supabase/supabase-js": "^2.98.0",
+    "@vercel/analytics": "^1.6.1",
+    "jose": "^6.2.2",
+    "next": "16.1.7",
+    "next-intl": "^4.8.3",
+    "openapi-fetch": "^0.17.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "recharts": "^3.7.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "openapi-typescript": "^7.13.0",
+    "tailwindcss": "^4",
+    "typescript": "^6",
+    "vitest": "^4.1.1"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "worv",
+  "description": "WoRV team plugins marketplace",
+  "owner": {
+    "name": "MaumAI-Company"
+  },
+  "plugins": [
+    {
+      "name": "ccusage-worv",
+      "description": "Claude Code, OpenCode, Codex CLI, Gemini CLI 팀 사용량 자동 수집 플러그인",
+      "version": "0.5.4",
+      "author": {
+        "name": "MaumAI-Company"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/MaumAI-Company/ccusage-worv"
+    }
+  ]
+}

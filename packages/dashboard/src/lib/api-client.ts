@@ -33,6 +33,17 @@ export interface ModelSummary {
   totalCost: number;
 }
 
+export interface HackathonTeamEntry {
+  teamId: string;
+  teamName: string;
+  teamDisplayName: string;
+  teamColor: string | null;
+  totalCost: number;
+  totalTokens: number;
+  sessionCount: number;
+  memberCount: number;
+}
+
 export interface StatsResponse {
   daily: DailyEntry[];
   members: MemberSummary[];
@@ -54,6 +65,7 @@ export interface StatsResponse {
   totalTurns: number;
   memberSessionCount: MemberSessionCount[];
   utilizationHistory: UtilizationHistory[];
+  teamLeaderboard: HackathonTeamEntry[];
 }
 
 export interface ReportMember {

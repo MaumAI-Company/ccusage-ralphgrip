@@ -22,6 +22,7 @@ const CacheAnalyticsChart = dynamic(() => import('@/components/CacheAnalyticsCha
 const CostPerSessionChart = dynamic(() => import('@/components/CostPerSessionChart').then(m => ({ default: m.CostPerSessionChart })), { ssr: false });
 const ModelMemberChart = dynamic(() => import('@/components/ModelMemberChart').then(m => ({ default: m.ModelMemberChart })), { ssr: false });
 const InsightsPanel = dynamic(() => import('@/components/InsightsPanel').then(m => ({ default: m.InsightsPanel })), { ssr: false });
+const TeamLeaderboard = dynamic(() => import('@/components/TeamLeaderboard').then(m => ({ default: m.TeamLeaderboard })), { ssr: false });
 
 function parseHash(): Record<string, string> {
   if (typeof window === 'undefined') return {};
@@ -364,6 +365,13 @@ function Home() {
               days={days}
             />
           </div>
+
+          {/* Team Leaderboard */}
+          {stats.teamLeaderboard && stats.teamLeaderboard.length > 0 && (
+            <div className="animate-fade-in-up animate-delay-2" style={{ marginBottom: '20px' }}>
+              <TeamLeaderboard teams={stats.teamLeaderboard} />
+            </div>
+          )}
 
           {/* Section 3: Leaderboard — Token TOP 10 */}
           <div style={{ marginBottom: '20px' }}>

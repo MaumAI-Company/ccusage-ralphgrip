@@ -8,6 +8,7 @@ export { ReportQuerySchema } from './report';
 export { WeeklyRankingQuerySchema } from './weekly-ranking';
 export { UpdateProfileSchema } from './profile';
 export { SseStatsQuerySchema, SseEventTypeSchema } from './sse';
+export { CreateTeamSchema, TeamMemberSchema } from './teams';
 
 // Type re-exports (inferred from Zod)
 export type { UsageReport, UsageRecord, ToolUsageEntry } from './usage';
@@ -19,6 +20,7 @@ export type { UpsertBudget } from './budgets';
 export type { ReportQuery } from './report';
 export type { WeeklyRankingQuery } from './weekly-ranking';
 export type { SseStatsQuery, SseEventType } from './sse';
+export type { CreateTeam, TeamMember } from './teams';
 
 // Common primitives
 export {

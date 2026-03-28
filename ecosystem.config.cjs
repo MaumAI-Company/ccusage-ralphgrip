@@ -1,8 +1,9 @@
 module.exports = {
   apps: [{
     name: 'ccusage-ralphgrip',
-    script: 'node_modules/.bin/next',
+    script: 'node_modules/next/dist/bin/next',
     args: 'start -p 3003',
+    interpreter: 'node',
     cwd: '/opt/ccusage-ralphgrip/packages/dashboard',
     env: {
       NODE_ENV: 'production',

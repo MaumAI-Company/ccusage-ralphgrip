@@ -6,11 +6,13 @@ import type {
   UtilizationWriteRepository, UsageReadRepository, MemberReadRepository,
   BudgetRepository, UtilizationReadRepository, PlanRepository,
   ToolUsageReadRepository, ReportRepository, ClaimRepository,
+  TeamReadRepository,
   ProcessedRecord, ValidToolEntry, DailyUsageRow, MemberUsageRow,
   ModelDistributionRow, MemberSessionCountRow, BudgetUsageRow, VelocityRow,
   BudgetConfigRow, UtilizationRow, RollingUsageRow, UtilizationHistoryRow,
   MemberPlanRow, ToolUsageSummaryRow, DailyToolUsageRow, TeamMemberRow,
-  ReportPlanRow, UnclaimedMemberRow, Clock,
+  ReportPlanRow, UnclaimedMemberRow, HackathonTeamRow, TeamMemberUsageRow,
+  TeamWithMembersRow, Clock,
 } from '@/lib/domain/ports';
 
 
@@ -166,6 +168,15 @@ export class MockClaimRepo implements ClaimRepository {
   async getUnclaimedMembersWithCounts() { return this.unclaimed; }
   async findMemberByName(name: string) { return this.members.get(name) ?? null; }
   async claimMember(memberId: string, email: string) { this.claimCalls.push({ memberId, email }); }
+}
+
+export class MockTeamReadRepo implements TeamReadRepository {
+  leaderboard: HackathonTeamRow[] = [];
+  memberUsage: TeamMemberUsageRow[] = [];
+  teamsWithMembers: TeamWithMembersRow[] = [];
+  async getTeamLeaderboard() { return this.leaderboard; }
+  async getTeamMemberUsage() { return this.memberUsage; }
+  async getAllTeamsWithMembers() { return this.teamsWithMembers; }
 }
 
 export function fixedClock(date: Date | string = '2026-03-24T12:00:00Z'): Clock {

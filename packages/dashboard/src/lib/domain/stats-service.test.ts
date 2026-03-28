@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { StatsService, invalidateStatsCache } from './stats-service';
 import {
   MockUsageReadRepo, MockMemberReadRepo, MockBudgetRepo,
-  MockUtilizationReadRepo, MockPlanRepo, MockToolUsageReadRepo, fixedClock,
+  MockUtilizationReadRepo, MockPlanRepo, MockToolUsageReadRepo, MockTeamReadRepo, fixedClock,
 } from '@/lib/test-utils/mock-repos';
 
 // Fixed clock: 2026-03-25T12:00:00Z
@@ -23,6 +23,7 @@ describe('StatsService', () => {
     service = new StatsService(
       usage, members, new MockBudgetRepo(), new MockUtilizationReadRepo(),
       new MockPlanRepo(), new MockToolUsageReadRepo(), fixedClock('2026-03-25T12:00:00Z'),
+      new MockTeamReadRepo(),
     );
   });
 

@@ -14,6 +14,8 @@ import { DeviceChallengeService } from '@/lib/domain/device-challenge-service';
 import { RefreshTokenService } from '@/lib/domain/refresh-token-service';
 import { AllowlistService } from '@/lib/domain/allowlist-service';
 import { SubscriptionManager } from '@/lib/domain/subscription-manager';
+import { TeamService } from '@/lib/domain/team-service';
+import { SupabaseTeamReadRepo, SupabaseTeamWriteRepo } from '@/lib/adapters/supabase-team-repos';
 import {
   SupabaseUsageRecordRepo,
   SupabaseMemberRepo,
@@ -55,6 +57,10 @@ const reportRepo = new SupabaseReportRepo();
 const claimRepo = new SupabaseClaimRepo();
 const profileRepo = new SupabaseProfileRepo();
 
+// Team adapter singletons
+const teamReadRepo = new SupabaseTeamReadRepo();
+const teamWriteRepo = new SupabaseTeamWriteRepo();
+
 // Auth adapter singletons
 const deviceChallengeRepo = new SupabaseDeviceChallengeRepo();
 const refreshTokenRepo = new SupabaseRefreshTokenRepo();
@@ -69,6 +75,7 @@ export const statsService = new StatsService(
   planRepo,
   toolUsageReadRepo,
   systemClock,
+  teamReadRepo,
 );
 
 // SSE subscription manager — connects usage ingestion to live dashboard updates
@@ -116,3 +123,5 @@ export const deviceChallengeService = new DeviceChallengeService(deviceChallenge
 export const refreshTokenService = new RefreshTokenService(refreshTokenRepo);
 
 export const allowlistService = new AllowlistService(allowlistRepo, loadAppConfig);
+
+export const teamService = new TeamService(teamReadRepo, teamWriteRepo);

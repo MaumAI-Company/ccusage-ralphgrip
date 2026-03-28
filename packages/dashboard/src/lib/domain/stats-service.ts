@@ -10,6 +10,8 @@ import type {
   UtilizationReadRepository,
   PlanRepository,
   ToolUsageReadRepository,
+  TeamReadRepository,
+  HackathonTeamRow,
 } from './ports';
 
 // In-memory cache
@@ -39,6 +41,7 @@ export class StatsService {
     private plans: PlanRepository,
     private toolUsage: ToolUsageReadRepository,
     private clock: Clock,
+    private teamRead?: TeamReadRepository,
   ) {}
 
   private sinceFromDays(days: number): string {
@@ -52,7 +55,7 @@ export class StatsService {
     const monthStartDate = getMonthStart(this.clock.now());
     const velocitySince = this.sinceFromDays(7);
 
-    const [daily, members, models, teamMembers, weeklyBudgets, monthlyBudgets, velocity, budgetConfigs, sessionCount, rolling5h, rolling7d, utilization, memberPlans, weeklyRanking, previousWeekTop, totalTurns, memberSessionCount, utilizationHistory] = await Promise.all([
+    const [daily, members, models, teamMembers, weeklyBudgets, monthlyBudgets, velocity, budgetConfigs, sessionCount, rolling5h, rolling7d, utilization, memberPlans, weeklyRanking, previousWeekTop, totalTurns, memberSessionCount, utilizationHistory, teamLeaderboard] = await Promise.all([
       cached(`daily-${k}`, () => this.usage.getDailyUsage(since)),
       cached(`members-${k}`, () => this.usage.getMemberUsage(since)),
       cached(`models-${k}`, () => this.usage.getModelDistribution(since)),
@@ -71,13 +74,14 @@ export class StatsService {
       cached(`totalTurns-${k}`, () => this.usage.getTotalTurns(since)),
       cached(`memberSessionCount-${k}`, () => this.usage.getMemberSessionCount(since)),
       cached(`utilizationHistory-${k}`, () => this.utilization.getUtilizationHistory(since)),
+      cached('teamLeaderboard', () => this.teamRead ? this.teamRead.getTeamLeaderboard(since) : Promise.resolve([] as HackathonTeamRow[])),
     ]);
 
     return {
       daily, members, models, teamMembers, weeklyBudgets, monthlyBudgets,
       velocity, budgetConfigs, sessionCount, rolling5h, rolling7d, utilization,
       memberPlans, weeklyRanking, previousWeekTop, totalTurns, memberSessionCount,
-      utilizationHistory,
+      utilizationHistory, teamLeaderboard,
     };
   }
 

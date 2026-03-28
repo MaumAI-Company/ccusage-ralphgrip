@@ -304,3 +304,48 @@ export interface RefreshTokenRepository {
 export interface AllowlistRepository {
   isEmailInList(email: string): Promise<boolean>;
 }
+
+// ============================================
+// Team Grouping (Ralphthon)
+// ============================================
+
+export interface HackathonTeamRow {
+  teamId: string;
+  teamName: string;
+  teamDisplayName: string;
+  teamColor: string | null;
+  totalCost: number;
+  totalTokens: number;
+  sessionCount: number;
+  memberCount: number;
+}
+
+export interface TeamMemberUsageRow {
+  memberId: string;
+  memberName: string;
+  totalCost: number;
+  totalTokens: number;
+  sessionCount: number;
+}
+
+export interface TeamWithMembersRow {
+  teamId: string;
+  teamName: string;
+  teamDisplayName: string;
+  teamColor: string | null;
+  memberId: string | null;
+  memberName: string | null;
+}
+
+export interface TeamReadRepository {
+  getTeamLeaderboard(sinceDate: string): Promise<HackathonTeamRow[]>;
+  getTeamMemberUsage(teamId: string, sinceDate: string): Promise<TeamMemberUsageRow[]>;
+  getAllTeamsWithMembers(): Promise<TeamWithMembersRow[]>;
+}
+
+export interface TeamWriteRepository {
+  createTeam(name: string, displayName?: string, color?: string): Promise<string>;
+  addMemberToTeam(teamId: string, memberId: string): Promise<void>;
+  removeMemberFromTeam(teamId: string, memberId: string): Promise<void>;
+  deleteTeam(teamId: string): Promise<void>;
+}

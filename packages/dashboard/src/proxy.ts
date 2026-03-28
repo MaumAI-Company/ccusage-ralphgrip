@@ -19,6 +19,8 @@ const PUBLIC_PREFIXES = [
   '/api/auth/',
   '/api/install',
   '/api/version',
+  '/api/live',
+  '/api/sse/live',
   '/_next/',
   '/favicon.ico',
 ];
@@ -43,7 +45,7 @@ function stripLocale(pathname: string): string {
 }
 
 // Pages that are public (no auth required) — checked against logical path (without locale prefix)
-const PUBLIC_PAGES = ['/setup'];
+const PUBLIC_PAGES = ['/setup', '/live'];
 
 function isPublicPage(logicalPath: string): boolean {
   return PUBLIC_PAGES.some(page => logicalPath === page || logicalPath.startsWith(page + '/'));

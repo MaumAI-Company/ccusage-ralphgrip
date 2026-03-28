@@ -84,10 +84,29 @@ export const statsSubscriptionManager = new SubscriptionManager<number, Awaited<
   queryKey: (days) => `stats-${days}`,
 });
 
+// Live subscription manager for /live page (stripped-down payload)
+export const liveSubscriptionManager = new SubscriptionManager<number, Record<string, unknown>>({
+  fetcher: async (days: number) => {
+    const stats = await statsService.getAll(days);
+    const since = new Date(Date.now() - days * 86400000).toISOString();
+    const teamLeaderboard = await teamService.getLeaderboard(since);
+    return {
+      teamLeaderboard,
+      members: stats.members?.slice(0, 15) ?? [],
+      totalCost: stats.members?.reduce((s: number, m: { totalCost: number }) => s + m.totalCost, 0) ?? 0,
+      sessionCount: stats.sessionCount ?? 0,
+      teamCount: teamLeaderboard.length,
+      memberCount: stats.teamMembers?.length ?? 0,
+    };
+  },
+  queryKey: (days) => `live-${days}`,
+});
+
 /** Invalidate both StatsService cache and SubscriptionManager state. */
 export function invalidateStats(): void {
   invalidateStatsCache();
   statsSubscriptionManager.invalidate();
+  liveSubscriptionManager.invalidate();
 }
 
 export const usageService = new UsageService(
@@ -99,6 +118,7 @@ export const usageService = new UsageService(
   () => {
     invalidateStatsCache();
     statsSubscriptionManager.notifyUpdate();
+    liveSubscriptionManager.notifyUpdate();
   },
 );
 

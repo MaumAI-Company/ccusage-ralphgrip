@@ -1,44 +1,24 @@
 import { NextRequest } from 'next/server';
-import { SseStatsQuerySchema } from '@/lib/schemas';
-import { statsSubscriptionManager } from '@/lib/container';
-import { getAuthenticatedEmail } from '@/lib/auth/helpers';
+import { liveSubscriptionManager } from '@/lib/container';
 
 export const dynamic = 'force-dynamic';
 
-const MAX_SSE_CONNECTIONS = 400;
+const MAX_LIVE_SSE_CONNECTIONS = 50;
 
 export async function GET(request: NextRequest) {
-  // Auth check — SSE connections hold server resources long-term
-  const email = await getAuthenticatedEmail(request);
-  if (!email) {
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  // No auth check — /live is public for venue display
 
   // Connection limit — prevent resource exhaustion
-  if (statsSubscriptionManager.subscriberCount >= MAX_SSE_CONNECTIONS) {
+  if (liveSubscriptionManager.subscriberCount >= MAX_LIVE_SSE_CONNECTIONS) {
     return new Response(JSON.stringify({ error: 'Too many connections' }), {
       status: 503,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const { searchParams } = new URL(request.url);
-  const parseResult = SseStatsQuerySchema.safeParse({
-    days: searchParams.get('days') ?? undefined,
-  });
-
-  if (!parseResult.success) {
-    return new Response(JSON.stringify({ error: 'Invalid days parameter' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const days = parseResult.data.days;
-  const clientId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  // Always use days=1 (covers the event day)
+  const days = 1;
+  const clientId = `live-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -54,7 +34,7 @@ export async function GET(request: NextRequest) {
 
       // Send initial state
       try {
-        const initialState = await statsSubscriptionManager.subscribe(
+        const initialState = await liveSubscriptionManager.subscribe(
           days,
           clientId,
           (state) => send('update', state),
@@ -78,7 +58,7 @@ export async function GET(request: NextRequest) {
       // Clean up on disconnect
       request.signal.addEventListener('abort', () => {
         clearInterval(heartbeat);
-        statsSubscriptionManager.unsubscribe(days, clientId);
+        liveSubscriptionManager.unsubscribe(days, clientId);
         try { controller.close(); } catch { /* already closed */ }
       });
     },
